@@ -1,0 +1,59 @@
+{
+	"name": "sqleet.js",
+	"version": "0.0.2",
+	"description": "sqleet library with support for opening and writing encrypted sqlite databases, prepared statements, and more",
+	"keywords": [
+		"sql",
+		"sqlite",
+		"sqleet",
+		"stand-alone",
+		"relational",
+		"database",
+		"RDBMS",
+		"data",
+		"query",
+		"statement",
+		"emscripten",
+		"wasm"
+	],
+	"license": "MIT",
+	"main": "./dist/worker/index.js",
+	"scripts": {
+		"build": "make clean && npm run build-worker && npm run build-database",
+		"build-database": "cd ./packages/database/ && webpack && cd ../../ && make -j4",
+		"build-worker": "cd ./packages/worker/ && webpack",
+		"demo-copy-from-dist": "cpr ./dist ./demo -o",
+		"demo": "npm run demo-copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
+		"demo-node": "npm run demo-copy-from-dist && cd demo && node index.js",
+		"clean": "make clean-all",
+		"test": "npm run test-wasm && npm run test-wasm-debug",
+		"test-wasm": "node test/all.js wasm",
+		"test-wasm-debug": "node test/all.js wasm-debug"
+	},
+	"homepage": "http://github.com/pwnsdx/sqleet.js",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/pwnsdx/sqleet.js.git"
+	},
+	"bugs": {
+		"url": "https://github.com/pwnsdx/sqleet.js/issues",
+		"email": "sabri@riseup.net"
+	},
+	"devDependencies": {
+		"http-server": "0.11.1",
+		"test": ">=0.6",
+		"tiny-worker": "2.1.2",
+		"ts-loader": "6.0.4",
+		"typescript": "3.5.3",
+		"webpack-cli": "3.3.6",
+		"webpack-node-externals": "1.7.2"
+	},
+	"dependencies": {
+		"@types/emscripten": "1.38.0",
+		"@types/node": "12.7.1",
+		"@types/sharedworker": "0.0.28",
+		"cpr": "3.0.1",
+		"pseudo-worker": "git+https://github.com/pwnsdx/pseudo-worker.git#c8bcc87e3730b0d6593d9ef5bc60df0860d84643",
+		"webpack": "4.39.2"
+	}
+}

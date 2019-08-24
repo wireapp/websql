@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "es2016"],
+    "types": ["node", "@types/sharedworker"],
+    "rootDir": "src",
+    "outDir": "../../dist/worker",
+  },
+  "extends": "../../tsconfig.json"
+}
