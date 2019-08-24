@@ -1,4 +1,4 @@
-const websql = require('./websql.umd');
+const websql = require('./websql');
 
 const identifier = "aaaaa";
 const db = new websql.Database('./websql-worker-debug.js');
