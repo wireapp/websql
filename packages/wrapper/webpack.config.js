@@ -42,29 +42,14 @@ const defaults = {
   }
 };
 
-module.exports = [
-  {
-    ...defaults,
-    target: "web",
-    output: {
-      ...defaults.output,
-      filename: "[name].js",
-      libraryTarget: "var",
-      library: "[name]"
-    },
-    node: {
-      worker_threads: "empty"
-    }
+module.exports = {
+  ...defaults,
+  target: "node",
+  output: {
+    ...defaults.output,
+    filename: "[name].js",
+    library: "websql",
+    libraryTarget: "umd"
   },
-  {
-    ...defaults,
-    target: "node",
-    output: {
-      ...defaults.output,
-      filename: "[name].umd.js",
-      library: "websql",
-      libraryTarget: "umd"
-    },
-    externals: [nodeExternals()]
-  }
-];
+  externals: [nodeExternals()]
+};
