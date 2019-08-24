@@ -1,7 +1,7 @@
 ## websql
 [![Build Status](https://travis-ci.org/wireapp/websql.svg?branch=master)](http://travis-ci.org/wireapp/websql)
 
-##### Currently in alpha
+##### Currently WIP
 
 websql is a fork of [sql.js](https://github.com/kripken/sql.js) with some changes:
 
@@ -20,7 +20,7 @@ websql is a fork of [sql.js](https://github.com/kripken/sql.js) with some change
 - Degraded support in Safari (use of Web Workers which does not allow multi-window env)
 - Degraded support in Edge 18 and below (use of Pseudo Web Worker which runs in the main thread and does not allow multi-window env as Edge does not support window.crypto nor IndexedDB inside Workers) (Note that Edge 77 Beta supports Shared Worker as it is based on Chromium)
 
-SQLite is public domain, websql and sql.js is MIT licensed.
+SQLite is under public domain, sql.js is MIT licensed and websql is GNU licensed.
 
 ## Demo
 
