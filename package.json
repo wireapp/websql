@@ -1,9 +1,10 @@
 {
-	"name": "sqleet.js",
+	"name": "websql",
 	"version": "0.0.2",
-	"description": "sqleet library with support for opening and writing encrypted sqlite databases, prepared statements, and more",
+	"description": "Encrypted SQLite database for the browser and Node.JS",
 	"keywords": [
 		"sql",
+		"websql",
 		"sqlite",
 		"sqleet",
 		"stand-alone",
@@ -20,8 +21,8 @@
 	"main": "./dist/worker/index.js",
 	"scripts": {
 		"build": "make clean && npm run build-worker && npm run build-database",
-		"build-database": "cd ./packages/database/ && webpack && cd ../../ && make -j4",
-		"build-worker": "cd ./packages/worker/ && webpack",
+		"build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
+		"build-worker": "cd ./packages/wrapper/ && webpack",
 		"demo-copy-from-dist": "cpr ./dist ./demo -o",
 		"demo": "npm run demo-copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
 		"demo-node": "npm run demo-copy-from-dist && cd demo && node index.js",
@@ -30,14 +31,14 @@
 		"test-wasm": "node test/all.js wasm",
 		"test-wasm-debug": "node test/all.js wasm-debug"
 	},
-	"homepage": "http://github.com/pwnsdx/sqleet.js",
+	"homepage": "http://github.com/wireapp/websql",
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/pwnsdx/sqleet.js.git"
+		"url": "http://github.com/wireapp/websql.git"
 	},
 	"bugs": {
-		"url": "https://github.com/pwnsdx/sqleet.js/issues",
-		"email": "sabri@riseup.net"
+		"url": "https://github.com/wireapp/websql/issues",
+		"email": "opensource@wire.com"
 	},
 	"devDependencies": {
 		"http-server": "0.11.1",

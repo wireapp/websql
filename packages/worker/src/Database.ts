@@ -1,4 +1,29 @@
-import { SQLite, NULL_PTR, DatabaseAlreadyMountedError, InvalidEncryptionKeyError, isNodejs } from "./Helper";
+/*
+ * Wire
+ * Copyright (C) 2019 Wire Swiss GmbH
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see http://www.gnu.org/licenses/.
+ *
+ */
+
+import {
+  SQLite,
+  NULL_PTR,
+  DatabaseAlreadyMountedError,
+  InvalidEncryptionKeyError,
+  isNodejs
+} from "./Helper";
 import { Statement } from "./Statement";
 import {
   sqlite3_open,
@@ -37,7 +62,7 @@ export class Database {
   private identifier?: string;
   private nodeDatabaseDir?: string;
 
-  private static readonly metadataTableName = '_sqleet_metadata';
+  private static readonly metadataTableName = "_sqleet_metadata";
   private static readonly mountName = "/sqleet";
   private static readonly databaseExtension = "db";
 
@@ -51,7 +76,7 @@ export class Database {
   public async mount(
     options: ConnectionOptions,
     identifier: string = "default",
-    nodeDatabaseDir?: string,
+    nodeDatabaseDir?: string
   ): Promise<void> {
     if (this.databaseInstancePtr) {
       throw DatabaseAlreadyMountedError("Database is already mounted");
@@ -70,7 +95,9 @@ export class Database {
     // Set the database storage location for Node.JS
     if (isNodejs) {
       if (!nodeDatabaseDir) {
-        throw new Error('You need to specify a directory to use to store the database. Check the nodeDatabaseDir option.');
+        throw new Error(
+          "You need to specify a directory to use to store the database. Check the nodeDatabaseDir option."
+        );
       }
       this.nodeDatabaseDir = nodeDatabaseDir;
     }
@@ -102,9 +129,7 @@ export class Database {
       );
     } catch (error) {
       throw InvalidEncryptionKeyError(
-        `Encryption key is most likely invalid, you will either need to wipe the database or use another identifier. Original message: ${
-          error.message
-        }`
+        `Encryption key is most likely invalid, you will either need to wipe the database or use another identifier. Original message: ${error.message}`
       );
     }
   }
@@ -116,7 +141,7 @@ export class Database {
     if (!this.idbfsMounted) {
       FS.mkdir(Database.mountName);
       if (isNodejs) {
-        FS.mount(NODEFS, {root: this.nodeDatabaseDir}, Database.mountName);
+        FS.mount(NODEFS, { root: this.nodeDatabaseDir }, Database.mountName);
       } else {
         FS.mount(IDBFS, {}, Database.mountName);
       }
@@ -362,7 +387,9 @@ export class Database {
     try {
       FS.unlink(Database.getDatabasePath(identifier));
     } catch (error) {
-      throw new Error(`Database either does not exist or is already deleted (${error.message})`)
+      throw new Error(
+        `Database either does not exist or is already deleted (${error.message})`
+      );
     }
     await this.saveChanges();
   }

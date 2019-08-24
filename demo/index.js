@@ -1,7 +1,7 @@
-const sqleet = require('./sqleet.node');
+const websql = require('./websql.umd');
 
 const identifier = "aaaaa";
-const db = new sqleet.Database('./sqleet-worker-debug.js');
+const db = new websql.Database('./websql-worker-debug.js');
 
 const log = (functionName, text) => console.log(`${functionName}: ${text}`)
 const timer = () => {

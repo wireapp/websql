@@ -38,17 +38,17 @@ BITCODE_FILES = .tmp/sqlite3.bc .tmp/extension-functions.bc
 all: optimized debug
 
 .PHONY: debug
-debug: dist/sqleet-worker-debug.js
+debug: dist/websql-worker-debug.js
 
-dist/sqleet-worker-debug.js: $(BITCODE_FILES) .tmp/api.js exports/functions.json exports/runtime_methods.json
-	# Generate sqleet-worker-debug.js
+dist/websql-worker-debug.js: $(BITCODE_FILES) .tmp/api.js exports/functions.json exports/runtime_methods.json
+	# Generate websql-worker-debug.js
 	$(EMCC) $(EMFLAGS) $(EMFLAGS_DEBUG) $(EMFLAGS_SECURE) $(EMFLAGS_WASM) $(BITCODE_FILES) --pre-js .tmp/api.js -o $@
 
 .PHONY: optimized
-optimized: dist/sqleet-worker.js
+optimized: dist/websql-worker.js
 
-dist/sqleet-worker.js: $(BITCODE_FILES) .tmp/api.js exports/functions.json exports/runtime_methods.json 
-	# Generate sqleet-worker.js
+dist/websql-worker.js: $(BITCODE_FILES) .tmp/api.js exports/functions.json exports/runtime_methods.json 
+	# Generate websql-worker.js
 	$(EMCC) $(EMFLAGS) $(EMFLAGS_OPTIMIZED) $(EMFLAGS_SECURE) $(EMFLAGS_WASM) $(BITCODE_FILES) --pre-js .tmp/api.js -o $@
 
 .tmp/sqlite3.bc: sqleet/sqleet.c

@@ -1,6 +1,6 @@
 <meta charset="utf8" />
 <html>
-  <script src="./sqleet.js"></script>
+  <script src="./websql.js"></script>
   <script>
     // helpers
     const log = (functionName, text, outputId = "output") =>
@@ -163,7 +163,7 @@
 
     async function main() {
       try {
-        db = new sqleet.Database("./sqleet-worker.js", {allowWebWorkerFallback: true, allowMainWebWorker: true});
+        db = new websql.Database("./websql-worker.js", {allowWebWorkerFallback: true, allowMainWebWorker: true});
       } catch (error) {
         return log(
           "An error happened while initializing the engine",
@@ -196,10 +196,10 @@
   </script>
 
   <body>
-    <h2>sqleet.js demo</h2>
-    <p>Encrypted SQLite library for the browser (<a href="https://github.com/pwnsdx/sqleet.js">Github</a>)</p>
+    <h2>websql demo</h2>
+    <p>Encrypted SQLite database for the browser and Node.JS (<a href="https://github.com/wireapp/websql">Github</a>)</p>
     <p>
-      Here you can benchmark how fast sqleet is and also wipe the database. More
+      Here you can benchmark how fast websql is and also wipe the database. More
       details are available in the developer console.
     </p>
     <p id="init_error" style="color: red;"></p>

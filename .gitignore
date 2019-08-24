@@ -5,6 +5,3 @@ node_modules/
 .tmp/
 dist/
 .DS_Store
-#demo/sqleet-worker-debug.js
-#demo/sqleet-worker.js
-#demo/sqleet.js

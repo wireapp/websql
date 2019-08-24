@@ -1,7 +1,7 @@
+.tmp/
+demo/
 test/
-c/
-coffee/
-gh-pages/
+sqleet/
 node_modules/
 node-debug.log
 .git/
