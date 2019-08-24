@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "lib": ["webworker", "es2016"],
-    "types": ["node", "@types/emscripten", "@types/sharedworker"],
-    "rootDir": "src",
-    "outDir": "../../dist/database",
-  },
-  "extends": "../../tsconfig.json"
-}

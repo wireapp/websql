@@ -22,7 +22,9 @@ const nodeExternals = require("webpack-node-externals");
 
 const defaults = {
   mode: "production",
-  entry: "./src/index.ts",
+  entry: {
+    websql: "./src/index.ts"
+  },
   module: {
     rules: [
       {
@@ -34,16 +36,34 @@ const defaults = {
   },
   resolve: {
     extensions: [".ts", ".js"]
+  },
+  output: {
+    path: path.resolve(__dirname, "..", "..", "dist")
   }
 };
 
 module.exports = [
   {
     ...defaults,
+    target: "web",
+    output: {
+      ...defaults.output,
+      filename: "[name].js",
+      libraryTarget: "var",
+      library: "[name]"
+    },
+    node: {
+      worker_threads: "empty"
+    }
+  },
+  {
+    ...defaults,
     target: "node",
     output: {
-      filename: "api.js",
-      path: path.resolve(__dirname, "..", "..", ".tmp")
+      ...defaults.output,
+      filename: "[name].umd.js",
+      library: "websql",
+      libraryTarget: "umd"
     },
     externals: [nodeExternals()]
   }
