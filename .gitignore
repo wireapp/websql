@@ -3,5 +3,4 @@ node_modules/
 
 # Intermediary files
 .tmp/
-dist/
 .DS_Store
