@@ -67,7 +67,7 @@ export enum SQLite {
   UTF8 = 1
 }
 
-export function __range__(left: number, right: number, inclusive: any) {
+export function __range__(left: number, right: number, inclusive: any): number[] {
   let range: number[] = [];
   let ascending = left < right;
   let end = !inclusive ? right : ascending ? right + 1 : right - 1;
