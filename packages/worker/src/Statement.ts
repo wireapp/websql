@@ -49,9 +49,9 @@ export const whitelistedFunctions = [
   "run"
 ];
 
-type ValueType = string | number | Uint8Array | null;
-type BindType = any[] | {};
-type ResultGetType = (ValueType)[];
+export type ValueType = string | number | Uint8Array | null;
+export type BindType = any[] | {};
+export type ResultGetType = (ValueType)[];
 
 /* Represents a prepared statement.
 

@@ -19,7 +19,7 @@
 
 import {isIEOrLegacyEdge} from './Helper';
 
-interface DatabaseWorkerOptions {
+export interface DatabaseWorkerOptions {
   allowWebWorkerFallback: boolean;
   allowMainWebWorker: boolean;
 }

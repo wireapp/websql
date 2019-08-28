@@ -52,7 +52,8 @@ export const whitelistedFunctions = [
   "prepare"
 ];
 
-type ExecResultInterface = { columns?: string[]; values: any[] };
+export type ExecResultInterface = { columns: string[]; values: any[] };
+export type ParamsInterface = any[] | {};
 
 export class Database {
   private databaseInstancePtr?: number;
@@ -223,7 +224,7 @@ export class Database {
     @example Insert values in a table
         db.run('INSERT INTO test VALUES (:age, :name)', {':age':18, ':name':'John'});
   */
-  public async run(query: string, params?: any[]): Promise<void> {
+  public async run(query: string, params?: ParamsInterface): Promise<void> {
     this.ensureDatabaseIsOpen();
     if (params) {
       const statementId = await this.prepare(query, params);
@@ -329,7 +330,7 @@ export class Database {
   }
 
   // Prepare an SQL statement
-  public prepare(query: string, params: any[]): number {
+  public prepare(query: string, params?: ParamsInterface): number {
     Module.setValue(apiTemp, 0, "i32");
     this.handleError(
       sqlite3_prepare_v2(this.databaseInstancePtr, query, -1, apiTemp, NULL_PTR)

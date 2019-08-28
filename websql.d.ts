@@ -1,9 +1,7 @@
 import { SQLite } from "./packages/worker/src/Helper";
-
-declare type ExecResultInterface = {
-  columns?: string[];
-  values: any[];
-};
+import {ExecResultInterface, ParamsInterface} from "./packages/worker/src/Database";
+import { ResultGetType, BindType } from "./packages/worker/src/Statement";
+import { DatabaseWorkerOptions } from "./packages/wrapper/src";
 
 declare interface ConnectionOptions {
   vfs?: string;
@@ -19,14 +17,6 @@ declare interface ConnectionOptions {
   page_size?: unknown;
   key: string;
 }
-declare interface DatabaseWorkerOptions {
-  allowWebWorkerFallback: boolean;
-  allowMainWebWorker: boolean;
-}
-
-declare type ValueType = string | number | Uint8Array | null;
-declare type BindType = any[] | {};
-declare type ResultGetType = (ValueType)[];
 
 // All public functions from Statement are promisified in the proxy
 // Statement cannot be instantiated from outside so we can remove the constructor here
@@ -53,12 +43,12 @@ export declare class Database {
   ): Promise<void>;
   close(saveAfterClose?: boolean): Promise<void>;
   saveChanges(): Promise<void>;
-  run(query: string, params?: any[]): Promise<void>;
+  run(query: string, params?: ParamsInterface): Promise<void>;
   execute(query: string): Promise<ExecResultInterface[]>;
   export(encoding?: "binary" | "utf8"): Promise<Uint8Array | string>;
   wipe(identifier: string): Promise<void>;
   getRowsModified(): Promise<number>;
-  prepare(query: string, params: any[]): Promise<Statement>;
+  prepare(query: string, params?: ParamsInterface): Promise<Statement>;
 }
 
 export {};
