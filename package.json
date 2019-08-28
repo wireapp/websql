@@ -19,6 +19,7 @@
 	],
 	"license": "MIT",
 	"main": "./dist/websql.js",
+	"types": "websql.d.ts",
 	"scripts": {
 		"build": "make clean && npm run build-worker && npm run build-database",
 		"build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",

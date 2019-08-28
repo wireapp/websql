@@ -329,7 +329,7 @@ export class Database {
   }
 
   // Prepare an SQL statement
-  private prepare(query: string, params: any[]): number {
+  public prepare(query: string, params: any[]): number {
     Module.setValue(apiTemp, 0, "i32");
     this.handleError(
       sqlite3_prepare_v2(this.databaseInstancePtr, query, -1, apiTemp, NULL_PTR)
