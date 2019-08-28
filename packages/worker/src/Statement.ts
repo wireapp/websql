@@ -336,6 +336,9 @@ export class Statement {
         } else if (value.length != null) {
           return this.bindBlob(value, pos);
         }
+        break;
+      case "undefined":
+        return this.bindNull(pos);
     }
 
     throw new Error(
