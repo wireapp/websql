@@ -17,12 +17,8 @@
  *
  */
 
-import {isIEOrLegacyEdge} from './Helper';
-
-export interface DatabaseWorkerOptions {
-  allowWebWorkerFallback: boolean;
-  allowMainWebWorker: boolean;
-}
+import { isIEOrLegacyEdge } from "./Helper";
+import { DatabaseWorkerOptions } from "./WorkerInterface";
 
 export class Database {
   private static readonly isNodejs =
@@ -40,7 +36,8 @@ export class Database {
 
   // It is easier to detect Edge than running a IndexedDB test in a worker
   // as we run everything in the constructor and we don't want async code there
-  private static readonly isIEOrLegacyEdge = typeof window !== "undefined" && isIEOrLegacyEdge();
+  private static readonly isIEOrLegacyEdge =
+    typeof window !== "undefined" && isIEOrLegacyEdge();
 
   private static MessageChannel: new () => MessageChannel;
 
@@ -60,7 +57,7 @@ export class Database {
       // Useful for browsers which does not support Web Workers properly
       // E.g. Edge does not support window.crypto nor IndexedDB inside Workers
       // Which makes the use of this module impossible in a Worker context
-      allowMainWebWorker: false,
+      allowMainWebWorker: false
     }
   ) {
     if (Database.isNodejs) {
@@ -86,10 +83,12 @@ export class Database {
       (!Database.isWorkerSupported || Database.isIEOrLegacyEdge) &&
       options.allowMainWebWorker
     ) {
-      console.warn("websql: Using Pseudo Web Worker. Experience will be degraded heavily.");
-      console.log('Database.isWorkerSupported ', Database.isWorkerSupported);
-      console.log('Database.isIEOrLegacyEdge ', Database.isIEOrLegacyEdge);
-      const PseudoWorker = require('pseudo-worker');
+      console.warn(
+        "websql: Using Pseudo Web Worker. Experience will be degraded heavily."
+      );
+      console.log("Database.isWorkerSupported ", Database.isWorkerSupported);
+      console.log("Database.isIEOrLegacyEdge ", Database.isIEOrLegacyEdge);
+      const PseudoWorker = require("pseudo-worker");
       this.worker = new PseudoWorker(workerUrl);
     } else {
       throw new Error(

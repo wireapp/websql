@@ -37,6 +37,7 @@ import {
   sqlite3_column_type
 } from "./lib/sqlite3";
 import { Database } from "./Database";
+import { ResultGetType, BindType, ValueType }  from "./StatementInterface";
 
 export const whitelistedFunctions = [
   "bind",
@@ -48,10 +49,6 @@ export const whitelistedFunctions = [
   "reset",
   "run"
 ];
-
-export type ValueType = string | number | Uint8Array | null;
-export type BindType = any[] | {};
-export type ResultGetType = (ValueType)[];
 
 /* Represents a prepared statement.
 
@@ -213,7 +210,7 @@ export class Statement {
       If you want to bind data you can do: statement.bind({stuff});
       console.log(statement.getAsObject()); // Will print [{nbr:5, data: Uint8Array([1,2,3]), null_value:null}]
     */
-  public getAsObject(): {}[] {
+  public getAsObject(): {[key:string]: any}[] {
     const rowObject: Record<string, ValueType>[] = [];
     let columns: string[] | undefined = undefined;
 

@@ -35,6 +35,8 @@ import {
   sqlite3_changes,
   RegisterExtensionFunctions
 } from "./lib/sqlite3";
+import { ExecResultInterface, ParamsInterface } from "./DatabaseInteface";
+import { ConnectionOptions } from "./DatabaseInteface";
 
 const apiTemp = stackAlloc(4);
 
@@ -51,9 +53,6 @@ export const whitelistedFunctions = [
   "execute",
   "prepare"
 ];
-
-export type ExecResultInterface = { columns: string[]; values: any[] };
-export type ParamsInterface = any[] | {};
 
 export class Database {
   private databaseInstancePtr?: number;
@@ -312,7 +311,7 @@ export class Database {
 
       const statement = new Statement(pointerStatement, this);
       const curresult: ExecResultInterface = {
-        columns: undefined,
+        columns: [],
         values: []
       };
 
