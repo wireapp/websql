@@ -44,6 +44,7 @@ export const whitelistedFunctions = [
   "getColumnNames",
   "getAsObject",
   "free",
+  "step",
   "reset",
   "run"
 ];
