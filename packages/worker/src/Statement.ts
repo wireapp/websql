@@ -213,7 +213,7 @@ export class Statement {
       If you want to bind data you can do: statement.bind({stuff});
       console.log(statement.getAsObject()); // Will print [{nbr:5, data: Uint8Array([1,2,3]), null_value:null}]
     */
-  public getAsObject(): {}[] {
+  public getAsObject(): {[key:string]: any}[] {
     const rowObject: Record<string, ValueType>[] = [];
     let columns: string[] | undefined = undefined;
 

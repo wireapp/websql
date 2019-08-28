@@ -25,7 +25,7 @@ declare class Statement {
   step(): Promise<boolean | void>;
   get(params?: BindType): Promise<ResultGetType>;
   getColumnNames(): Promise<string[]>;
-  getAsObject(): Promise<{}[]>;
+  getAsObject(): Promise<{[key:string]: any}[]>;
   run(values: BindType): Promise<void>;
   reset(): Promise<boolean>;
   free(): Promise<boolean>;
