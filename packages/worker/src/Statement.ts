@@ -209,9 +209,10 @@ export class Statement {
     
     @example
       const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
+      If you want to bind data you can do: statement.bind({stuff});
       console.log(statement.getAsObject()); // Will print [{nbr:5, data: Uint8Array([1,2,3]), null_value:null}]
     */
-  public getAsObject(params?: BindType): {}[] {
+  public getAsObject(): {}[] {
     const rowObject: Record<string, ValueType>[] = [];
     let columns: string[] | undefined = undefined;
 
@@ -219,7 +220,7 @@ export class Statement {
       if (!columns) {
         columns = this.getColumnNames();
       }
-      const values = this.get(params);
+      const values = this.get();
       const row: Record<string, ValueType> = {};
       for (let i = 0; i < columns.length; i++) {
         row[columns[i]] = values[i];
