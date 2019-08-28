@@ -1,5 +1,5 @@
 {
-	"name": "websql",
+	"name": "@wireapp/websql",
 	"version": "0.0.2",
 	"description": "Encrypted SQLite database for the browser and Node.JS",
 	"keywords": [
