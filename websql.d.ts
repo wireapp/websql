@@ -24,11 +24,6 @@ declare interface DatabaseWorkerOptions {
   allowMainWebWorker: boolean;
 }
 
-// Because Database in Wrapper is a proxy to the Database class in Worker,
-// we have to maintain this class manually
-
-// The constructor is from the Wrapper, the rest is from the Worker
-
 declare type ValueType = string | number | Uint8Array | null;
 declare type BindType = any[] | {};
 declare type ResultGetType = (ValueType)[];
@@ -46,6 +41,9 @@ declare class Statement {
   free(): Promise<boolean>;
 }
 
+// Because Database in Wrapper is a proxy to the Database class in Worker we have to
+// maintain this class manually
+// Note: The constructor is from the Wrapper, the rest is from the Worker
 export declare class Database {
   constructor(workerUrl: string, options?: DatabaseWorkerOptions);
   mount(
