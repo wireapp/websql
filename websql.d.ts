@@ -1,22 +1,14 @@
 import { SQLite } from "./packages/worker/src/Helper";
-import {ExecResultInterface, ParamsInterface} from "./packages/worker/src/Database";
-import { ResultGetType, BindType } from "./packages/worker/src/Statement";
-import { DatabaseWorkerOptions } from "./packages/wrapper/src";
-
-declare interface ConnectionOptions {
-  vfs?: string;
-  mode?: "ro" | "rw" | "rwc" | "memory";
-  cache?: "shared" | "private";
-  psow?: boolean;
-  nolock?: boolean;
-  immutable?: boolean;
-  salt?: string;
-  header?: unknown;
-  kdf?: string;
-  skip?: unknown;
-  page_size?: unknown;
-  key: string;
-}
+import {
+  ExecResultInterface,
+  ParamsInterface,
+  ConnectionOptions
+} from "./packages/worker/src/DatabaseInteface";
+import {
+  ResultGetType,
+  BindType
+} from "./packages/worker/src/StatementInterface";
+import { DatabaseWorkerOptions } from "./packages/wrapper/src/WorkerInterface";
 
 // All public functions from Statement are promisified in the proxy
 // Statement cannot be instantiated from outside so we can remove the constructor here
@@ -25,7 +17,7 @@ declare class Statement {
   step(): Promise<boolean | void>;
   get(params?: BindType): Promise<ResultGetType>;
   getColumnNames(): Promise<string[]>;
-  getAsObject(): Promise<{[key:string]: any}[]>;
+  getAsObject(): Promise<{ [key: string]: any }[]>;
   run(values: BindType): Promise<void>;
   reset(): Promise<boolean>;
   free(): Promise<boolean>;
