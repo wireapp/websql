@@ -42,5 +42,3 @@ export declare class Database {
   getRowsModified(): Promise<number>;
   prepare(query: string, params?: ParamsInterface): Promise<Statement>;
 }
-
-export {};
