@@ -42,7 +42,7 @@ declare class Statement {
 }
 
 // Because Database in Wrapper is a proxy to the Database class in Worker we have to
-// maintain this class manually
+// maintain this class declaration manually
 // Note: The constructor is from the Wrapper, the rest is from the Worker
 export declare class Database {
   constructor(workerUrl: string, options?: DatabaseWorkerOptions);
