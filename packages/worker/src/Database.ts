@@ -53,7 +53,7 @@ export const whitelistedFunctions = [
 ];
 
 export type ExecResultInterface = { columns: string[]; values: any[] };
-export type ParamsInterface = any[] | {};
+export type ParamsInterface = any[] | {[key:string]: any};
 
 export class Database {
   private databaseInstancePtr?: number;
