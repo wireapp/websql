@@ -37,7 +37,8 @@ export declare class Database {
   saveChanges(): Promise<void>;
   run(query: string, params?: ParamsInterface): Promise<void>;
   execute(query: string): Promise<ExecResultInterface[]>;
-  export(encoding?: "binary" | "utf8"): Promise<Uint8Array | string>;
+  export(encoding?: "binary"): Promise<Uint8Array>;
+  export(encoding: "utf8"): Promise<string>;
   wipe(identifier: string): Promise<void>;
   getRowsModified(): Promise<number>;
   prepare(query: string, params?: ParamsInterface): Promise<Statement>;
