@@ -1,6 +1,6 @@
 {
 	"name": "@wireapp/websql",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "Encrypted SQLite database for the browser and Node.JS",
 	"keywords": [
 		"sql",
