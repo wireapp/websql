@@ -34,7 +34,9 @@ No API docs yet. But you can check out the demo file [here](https://github.com/w
 
 ## Compiling & Installation
 
-#### Install emsdk
+### Install emsdk
+
+#### macOS
 
 ```
 brew install python2 && brew link python2
@@ -47,16 +49,32 @@ source ./emsdk_env.sh
 cd ..
 ```
 
-#### Compile websql
+#### Linux
+
+```
+sudo apt-get install python3 default-jre
+git clone https://github.com/emscripten-core/emsdk.git
+cd emsdk
+./emsdk install latest
+./emsdk activate latest
+source ./emsdk_env.sh
+cd ..
+```
+
+### Compile websql
 
 ```
 cd websql
+git submodule init
+git submodule update
 npm install && npm run build
 ```
 
-#### Run demo server
+### Run demo server
 
-`npm run demo`
+```
+npm run demo
+```
 
 ## Thanks
 
