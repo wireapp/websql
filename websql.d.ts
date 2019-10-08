@@ -28,7 +28,7 @@ declare class Statement {
 // Note: The constructor is from the Wrapper, the rest is from the Worker
 export declare class Database {
   constructor(workerUrl: string, options?: DatabaseWorkerOptions);
-  _getWorkerInstance(): Worker;
+  _getWorkerInstance(): Promise<Worker>;
   mount(
     options: ConnectionOptions,
     identifier?: string,
