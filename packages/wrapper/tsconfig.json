@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "lib": ["dom", "es2016"],
-    "types": ["node", "@types/sharedworker"],
+    "outDir": "../../dist/websql",
     "rootDir": "src",
-    "outDir": "../../dist/websql"
+    "types": ["node", "@types/sharedworker"]
   },
   "extends": "../../tsconfig.json"
 }

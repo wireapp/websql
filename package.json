@@ -1,61 +1,61 @@
 {
-	"name": "@wireapp/websql",
-	"version": "0.0.5",
-	"description": "Encrypted SQLite database for the browser and Node.JS",
-	"keywords": [
-		"sql",
-		"websql",
-		"sqlite",
-		"sqleet",
-		"stand-alone",
-		"relational",
-		"database",
-		"RDBMS",
-		"data",
-		"query",
-		"statement",
-		"emscripten",
-		"wasm"
-	],
-	"license": "MIT",
-	"main": "./dist/websql.js",
-	"types": "websql.d.ts",
-	"scripts": {
-		"build": "make clean && npm run build-worker && npm run build-database",
-		"build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
-		"build-worker": "cd ./packages/wrapper/ && webpack",
-		"demo-copy-from-dist": "cpr ./dist ./demo -o",
-		"demo": "npm run demo-copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
-		"demo-node": "npm run demo-copy-from-dist && cd demo && node index.js",
-		"clean": "make clean-all",
-		"test": "npm run test-wasm && npm run test-wasm-debug",
-		"test-wasm": "node test/all.js wasm",
-		"test-wasm-debug": "node test/all.js wasm-debug"
-	},
-	"homepage": "http://github.com/wireapp/websql",
-	"repository": {
-		"type": "git",
-		"url": "http://github.com/wireapp/websql.git"
-	},
-	"bugs": {
-		"url": "https://github.com/wireapp/websql/issues",
-		"email": "opensource@wire.com"
-	},
-	"devDependencies": {
-		"http-server": "0.11.1",
-		"test": ">=0.6",
-		"tiny-worker": "2.1.2",
-		"ts-loader": "6.0.4",
-		"typescript": "3.5.3",
-		"webpack-cli": "3.3.6",
-		"webpack-node-externals": "1.7.2"
-	},
-	"dependencies": {
-		"@types/emscripten": "1.38.0",
-		"@types/node": "12.7.1",
-		"@types/sharedworker": "0.0.28",
-		"cpr": "3.0.1",
-		"pseudo-worker": "git+https://github.com/pwnsdx/pseudo-worker.git#c8bcc87e3730b0d6593d9ef5bc60df0860d84643",
-		"webpack": "4.39.2"
-	}
+  "bugs": {
+    "email": "opensource@wire.com",
+    "url": "https://github.com/wireapp/websql/issues"
+  },
+  "dependencies": {
+    "@types/emscripten": "1.38.0",
+    "@types/node": "12.7.1",
+    "@types/sharedworker": "0.0.28",
+    "cpr": "3.0.1",
+    "pseudo-worker": "git+https://github.com/pwnsdx/pseudo-worker.git#c8bcc87e3730b0d6593d9ef5bc60df0860d84643",
+    "webpack": "4.39.2"
+  },
+  "description": "Encrypted SQLite database for the browser and Node.JS",
+  "devDependencies": {
+    "http-server": "0.11.1",
+    "test": ">=0.6",
+    "tiny-worker": "2.1.2",
+    "ts-loader": "6.0.4",
+    "typescript": "3.5.3",
+    "webpack-cli": "3.3.6",
+    "webpack-node-externals": "1.7.2"
+  },
+  "homepage": "http://github.com/wireapp/websql",
+  "keywords": [
+    "sql",
+    "websql",
+    "sqlite",
+    "sqleet",
+    "stand-alone",
+    "relational",
+    "database",
+    "RDBMS",
+    "data",
+    "query",
+    "statement",
+    "emscripten",
+    "wasm"
+  ],
+  "license": "MIT",
+  "main": "./dist/websql.js",
+  "name": "@wireapp/websql",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/wireapp/websql.git"
+  },
+  "scripts": {
+    "build": "make clean && npm run build-worker && npm run build-database",
+    "build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
+    "build-worker": "cd ./packages/wrapper/ && webpack",
+    "clean": "make clean-all",
+    "demo": "npm run demo-copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
+    "demo-copy-from-dist": "cpr ./dist ./demo -o",
+    "demo-node": "npm run demo-copy-from-dist && cd demo && node index.js",
+    "test": "npm run test-wasm && npm run test-wasm-debug",
+    "test-wasm": "node test/all.js wasm",
+    "test-wasm-debug": "node test/all.js wasm-debug"
+  },
+  "types": "websql.d.ts",
+  "version": "0.0.5"
 }
