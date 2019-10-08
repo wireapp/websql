@@ -1,25 +1,23 @@
 {
   "compilerOptions": {
-    "types": ["node", "@types/emscripten", "@types/sharedworker"],
-    "target": "es2016",
-    "module": "commonjs",
     "allowJs": false,
-    "removeComments": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
     "alwaysStrict": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true
+    "removeComments": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "target": "es2016",
+    "types": ["node", "@types/emscripten", "@types/sharedworker"]
   },
-  "exclude": [
-    "node_modules"
-  ],
+  "exclude": ["node_modules"]
 }
