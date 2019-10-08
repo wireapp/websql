@@ -65,8 +65,7 @@ cd ..
 
 ```
 cd websql
-git submodule init
-git submodule update
+git submodule update --init --recursive
 npm install && npm run build
 ```
 
