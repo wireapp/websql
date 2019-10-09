@@ -13,15 +13,31 @@
   },
   "description": "Encrypted SQLite database for the browser and Node.JS",
   "devDependencies": {
+    "@wireapp/eslint-config": "1.3.0",
+    "@wireapp/prettier-config": "0.3.0",
+    "@wireapp/tslint-config": "1.4.1",
     "http-server": "0.11.1",
-    "test": ">=0.6",
+    "husky": "3.0.8",
+    "lint-staged": "9.4.2",
+    "prettier": "1.18.2",
+    "test": "0.6.0",
     "tiny-worker": "2.1.2",
     "ts-loader": "6.0.4",
+    "tslint": "5.20.0",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-plugin-prettier": "2.0.1",
+    "tslint-react": "4.1.0",
+    "tslint-react-hooks": "2.2.1",
     "typescript": "3.5.3",
     "webpack-cli": "3.3.6",
     "webpack-node-externals": "1.7.2"
   },
   "homepage": "http://github.com/wireapp/websql",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "keywords": [
     "sql",
     "websql",
@@ -38,8 +54,19 @@
     "wasm"
   ],
   "license": "MIT",
+  "lint-staged": {
+    "*.ts": [
+      "tslint --project tsconfig.json --fix",
+      "git add"
+    ],
+    "*.{json,md,css,yml}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "main": "./dist/websql.js",
   "name": "@wireapp/websql",
+  "prettier": "@wireapp/prettier-config",
   "repository": {
     "type": "git",
     "url": "http://github.com/wireapp/websql.git"
@@ -52,7 +79,14 @@
     "demo": "npm run demo-copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
     "demo-copy-from-dist": "cpr ./dist ./demo -o",
     "demo-node": "npm run demo-copy-from-dist && cd demo && node index.js",
-    "test": "npm run test-wasm && npm run test-wasm-debug",
+    "fix": "npm run fix:other && npm run fix:ts",
+    "fix:other": "npm run prettier -- --write",
+    "fix:ts": "npm run lint:ts -- --fix",
+    "lint": "npm run lint:other && npm run lint:ts",
+    "lint:other": "npm run prettier -- --list-different",
+    "lint:ts": "tslint --project tsconfig.json",
+    "prettier": "prettier \"**/*.{json,md,css,yml}\"",
+    "test": "npm run lint && npm run test-wasm && npm run test-wasm-debug",
     "test-wasm": "node test/all.js wasm",
     "test-wasm-debug": "node test/all.js wasm-debug"
   },

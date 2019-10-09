@@ -17,41 +17,34 @@
  *
  */
 
+import {ConnectionOptions, ExecResultInterface, ParamsInterface} from './DatabaseInteface';
+import {DatabaseAlreadyMountedError, InvalidEncryptionKeyError, NULL_PTR, SQLite, isNodejs} from './Helper';
 import {
-  SQLite,
-  NULL_PTR,
-  DatabaseAlreadyMountedError,
-  InvalidEncryptionKeyError,
-  isNodejs
-} from "./Helper";
-import { Statement } from "./Statement";
-import {
-  sqlite3_open,
-  sqlite3_exec,
-  sqlite3_prepare_v2_sqlptr,
-  sqlite3_prepare_v2,
+  RegisterExtensionFunctions,
+  sqlite3_changes,
   sqlite3_close_v2,
   sqlite3_errmsg,
-  sqlite3_changes,
-  RegisterExtensionFunctions
-} from "./lib/sqlite3";
-import { ExecResultInterface, ParamsInterface } from "./DatabaseInteface";
-import { ConnectionOptions } from "./DatabaseInteface";
+  sqlite3_exec,
+  sqlite3_open,
+  sqlite3_prepare_v2,
+  sqlite3_prepare_v2_sqlptr,
+} from './lib/sqlite3';
+import {Statement} from './Statement';
 
 const apiTemp = stackAlloc(4);
 
 declare const URLSearchParams: any;
 
 export const whitelistedFunctions = [
-  "mount",
-  "close",
-  "saveChanges",
-  "export",
-  "wipe",
-  "getRowsModified",
-  "run",
-  "execute",
-  "prepare"
+  'mount',
+  'close',
+  'saveChanges',
+  'export',
+  'wipe',
+  'getRowsModified',
+  'run',
+  'execute',
+  'prepare',
 ];
 
 export class Database {
@@ -62,9 +55,9 @@ export class Database {
   private identifier?: string;
   private nodeDatabaseDir?: string;
 
-  private static readonly metadataTableName = "_sqleet_metadata";
-  private static readonly mountName = "/sqleet";
-  private static readonly databaseExtension = "db";
+  private static readonly metadataTableName = '_sqleet_metadata';
+  private static readonly mountName = '/sqleet';
+  private static readonly databaseExtension = 'db';
 
   // A list of all prepared statements of the database
   public statements: Record<number, Statement> = {};
@@ -75,17 +68,15 @@ export class Database {
   // ToDo: Add a upgrade scheme?
   public async mount(
     options: ConnectionOptions,
-    identifier: string = "default",
-    nodeDatabaseDir?: string
+    identifier: string = 'default',
+    nodeDatabaseDir?: string,
   ): Promise<void> {
     if (this.databaseInstancePtr) {
-      throw DatabaseAlreadyMountedError("Database is already mounted");
+      throw DatabaseAlreadyMountedError('Database is already mounted');
     }
 
-    if (!options || !options["key"]) {
-      throw new Error(
-        "An encryption key must be set, aborting the mount operation"
-      );
+    if (!options || !options['key']) {
+      throw new Error('An encryption key must be set, aborting the mount operation');
     }
 
     // Update context
@@ -96,7 +87,7 @@ export class Database {
     if (isNodejs) {
       if (!nodeDatabaseDir) {
         throw new Error(
-          "You need to specify a directory to use to store the database. Check the nodeDatabaseDir option."
+          'You need to specify a directory to use to store the database. Check the nodeDatabaseDir option.',
         );
       }
       this.nodeDatabaseDir = nodeDatabaseDir;
@@ -109,12 +100,10 @@ export class Database {
     for (const option in this.options) {
       searchParams.set(option, this.options[option]);
     }
-    const fileUrl = `file:${Database.getDatabasePath(
-      this.identifier
-    )}?${searchParams.toString()}`;
+    const fileUrl = `file:${Database.getDatabasePath(this.identifier)}?${searchParams.toString()}`;
 
     this.handleError(sqlite3_open(fileUrl, apiTemp));
-    this.databaseInstancePtr = Module.getValue(apiTemp, "i32");
+    this.databaseInstancePtr = Module.getValue(apiTemp, 'i32');
 
     // Bind custom SQLite functions to this instance (see sqlite/extension-functions.c)
     RegisterExtensionFunctions(this.databaseInstancePtr);
@@ -125,23 +114,23 @@ export class Database {
       // cause "Maximum call stack size exceeded.", create instead
       // the metadata table specific for this engine
       await this.run(
-        `PRAGMA encoding="UTF-8"; CREATE TABLE IF NOT EXISTS ${Database.metadataTableName} (key text, value text);`
+        `PRAGMA encoding="UTF-8"; CREATE TABLE IF NOT EXISTS ${Database.metadataTableName} (key text, value text);`,
       );
     } catch (error) {
       throw InvalidEncryptionKeyError(
-        `Encryption key is most likely invalid, you will either need to wipe the database or use another identifier. Original message: ${error.message}`
+        `Encryption key is most likely invalid, you will either need to wipe the database or use another identifier. Original message: ${error.message}`,
       );
     }
   }
 
-  private static getDatabasePath = identifier =>
+  private static readonly getDatabasePath = identifier =>
     `${Database.mountName}/${identifier}.${Database.databaseExtension}`;
 
   private async ensureFilesystemIsMounted(): Promise<void> {
     if (!this.idbfsMounted) {
       FS.mkdir(Database.mountName);
       if (isNodejs) {
-        FS.mount(NODEFS, { root: this.nodeDatabaseDir }, Database.mountName);
+        FS.mount(NODEFS, {root: this.nodeDatabaseDir}, Database.mountName);
       } else {
         FS.mount(IDBFS, {}, Database.mountName);
       }
@@ -167,7 +156,7 @@ export class Database {
     */
   public async close(saveAfterClose: boolean = true): Promise<void> {
     if (!this.databaseInstancePtr) {
-      throw new Error("Database is already closed");
+      throw new Error('Database is already closed');
     }
 
     // Free and clear all statements
@@ -219,7 +208,7 @@ export class Database {
 
     If you use the params argument, you **cannot** provide an sql string that contains several
     queries (separated by ';')
-  
+
     @example Insert values in a table
         db.run('INSERT INTO test VALUES (:age, :name)', {':age':18, ':name':'John'});
   */
@@ -230,9 +219,7 @@ export class Database {
       this.statements[statementId].step();
       this.statements[statementId].free();
     } else {
-      this.handleError(
-        sqlite3_exec(this.databaseInstancePtr, query, 0, 0, apiTemp)
-      );
+      this.handleError(sqlite3_exec(this.databaseInstancePtr, query, 0, 0, apiTemp));
     }
   }
 
@@ -288,21 +275,13 @@ export class Database {
     const pzTail = stackAlloc(4);
 
     const results: ExecResultInterface[] = [];
-    while (Module.getValue(nextSqlPtr, "i8") !== NULL_PTR) {
-      Module.setValue(apiTemp, 0, "i32");
-      Module.setValue(pzTail, 0, "i32");
+    while (Module.getValue(nextSqlPtr, 'i8') !== NULL_PTR) {
+      Module.setValue(apiTemp, 0, 'i32');
+      Module.setValue(pzTail, 0, 'i32');
 
-      this.handleError(
-        sqlite3_prepare_v2_sqlptr(
-          this.databaseInstancePtr,
-          nextSqlPtr,
-          -1,
-          apiTemp,
-          pzTail
-        )
-      );
-      const pointerStatement = Module.getValue(apiTemp, "i32"); // Pointer to a statement, or null
-      nextSqlPtr = Module.getValue(pzTail, "i32");
+      this.handleError(sqlite3_prepare_v2_sqlptr(this.databaseInstancePtr, nextSqlPtr, -1, apiTemp, pzTail));
+      const pointerStatement = Module.getValue(apiTemp, 'i32'); // Pointer to a statement, or null
+      nextSqlPtr = Module.getValue(pzTail, 'i32');
 
       if (pointerStatement === NULL_PTR) {
         // Empty statement
@@ -312,7 +291,7 @@ export class Database {
       const statement = new Statement(pointerStatement, this);
       const curresult: ExecResultInterface = {
         columns: [],
-        values: []
+        values: [],
       };
 
       while (statement.step()) {
@@ -330,15 +309,13 @@ export class Database {
 
   // Prepare an SQL statement
   public prepare(query: string, params?: ParamsInterface): number {
-    Module.setValue(apiTemp, 0, "i32");
-    this.handleError(
-      sqlite3_prepare_v2(this.databaseInstancePtr, query, -1, apiTemp, NULL_PTR)
-    );
+    Module.setValue(apiTemp, 0, 'i32');
+    this.handleError(sqlite3_prepare_v2(this.databaseInstancePtr, query, -1, apiTemp, NULL_PTR));
 
     // Pointer to a statement, or null
-    const statementPtr = Module.getValue(apiTemp, "i32");
+    const statementPtr = Module.getValue(apiTemp, 'i32');
     if (statementPtr === NULL_PTR) {
-      throw new Error("Nothing to prepare");
+      throw new Error('Nothing to prepare');
     }
 
     const statement = new Statement(statementPtr, this);
@@ -355,9 +332,7 @@ export class Database {
   // the web page run out of memory when calling this function
   // ToDo: Use an iterative approach (https://developers.redhat.com/blog/2014/05/20/communicating-large-objects-with-web-workers-in-javascript/)
   // FS.read can be used to split the data into chunks, multiple postMessage will be required
-  public async export(
-    encoding: "binary" | "utf8" = "binary"
-  ): Promise<Uint8Array | string> {
+  public async export(encoding: 'binary' | 'utf8' = 'binary'): Promise<Uint8Array | string> {
     this.ensureDatabaseIsOpen();
 
     const options = this.options;
@@ -367,7 +342,7 @@ export class Database {
     await this.close(true);
 
     const binaryDb = FS.readFile(Database.getDatabasePath(identifier), {
-      encoding
+      encoding,
     });
     await this.mount(options as ConnectionOptions, identifier, nodeDatabaseDir);
 
@@ -379,17 +354,13 @@ export class Database {
   */
   public async wipe(identifier: string): Promise<void> {
     if (this.databaseInstancePtr) {
-      throw new Error(
-        "Database instance needs to be closed first, use close()"
-      );
+      throw new Error('Database instance needs to be closed first, use close()');
     }
     await this.ensureFilesystemIsMounted();
     try {
       FS.unlink(Database.getDatabasePath(identifier));
     } catch (error) {
-      throw new Error(
-        `Database either does not exist or is already deleted (${error.message})`
-      );
+      throw new Error(`Database either does not exist or is already deleted (${error.message})`);
     }
     await this.saveChanges();
   }
@@ -406,7 +377,7 @@ export class Database {
   // Utils
   private ensureDatabaseIsOpen(): void {
     if (!this.databaseInstancePtr) {
-      throw new Error("Database closed");
+      throw new Error('Database closed');
     }
   }
   // Analyze a result code, return void if no error occured otherwise throw an error with a descriptive message

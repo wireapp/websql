@@ -1,4 +1,5 @@
 ## websql
+
 [![Build Status](https://travis-ci.org/wireapp/websql.svg?branch=master)](http://travis-ci.org/wireapp/websql)
 
 ##### Currently WIP
@@ -16,7 +17,8 @@ websql is a fork of [sql.js](https://github.com/kripken/sql.js) with some change
 - Migrated Coffeescript API to Typescript
 - Uses more modern build mechanisms
 
-*Note*: No Shared Worker support means currently:
+_Note_: No Shared Worker support means currently:
+
 - Degraded support in Safari (use of Web Workers which does not allow multi-window env)
 - Degraded support in Edge 18 and below (use of Pseudo Web Worker which runs in the main thread and does not allow multi-window env as Edge does not support window.crypto nor IndexedDB inside Workers) (Note that Edge 77 Beta supports Shared Worker as it is based on Chromium)
 

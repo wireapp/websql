@@ -27,9 +27,5 @@ export function isIEOrLegacyEdge(): boolean {
   // Do not detect "Edg" user agent since it's Chromium
 
   const userAgent = window.navigator.userAgent;
-  return (
-    userAgent.indexOf("MSIE ") > 0 ||
-    userAgent.indexOf("Trident/") > 0 ||
-    userAgent.indexOf("Edge/") > 0
-  );
+  return userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/') > 0 || userAgent.indexOf('Edge/') > 0;
 }

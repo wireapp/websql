@@ -17,27 +17,20 @@
  *
  */
 
-import { isIEOrLegacyEdge } from "./Helper";
-import { DatabaseWorkerOptions } from "./WorkerInterface";
+import {isIEOrLegacyEdge} from './Helper';
+import {DatabaseWorkerOptions} from './WorkerInterface';
 
 export class Database {
   private static readonly isNodejs =
-    typeof process === "object" &&
-    typeof process.versions === "object" &&
-    typeof process.versions.node === "string";
+    typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node === 'string';
   private static readonly isSharedWorkerSupported =
-    !Database.isNodejs &&
-    typeof window !== "undefined" &&
-    typeof window["SharedWorker"] !== "undefined";
+    !Database.isNodejs && typeof window !== 'undefined' && typeof window['SharedWorker'] !== 'undefined';
   private static readonly isWorkerSupported =
-    !Database.isNodejs &&
-    typeof window !== "undefined" &&
-    typeof window["Worker"] !== "undefined";
+    !Database.isNodejs && typeof window !== 'undefined' && typeof window['Worker'] !== 'undefined';
 
   // It is easier to detect Edge than running a IndexedDB test in a worker
   // as we run everything in the constructor and we don't want async code there
-  private static readonly isIEOrLegacyEdge =
-    typeof window !== "undefined" && isIEOrLegacyEdge();
+  private static readonly isIEOrLegacyEdge = typeof window !== 'undefined' && isIEOrLegacyEdge();
 
   private static MessageChannel: new () => MessageChannel;
 
@@ -47,28 +40,26 @@ export class Database {
   constructor(
     readonly workerUrl: string,
     readonly options: DatabaseWorkerOptions = {
-      // When Shared Worker is not available, you can use a Web Worker to achieve the same
-      // Be warned that using Web Worker will be an issue if you are running multiple tabs,
-      // it is recommended to prevent the opening of multiple database connections to avoid
-      // overwrite and data loss
-      allowWebWorkerFallback: false,
       // Main or Pseudo Web Worker will run within the current thread
       // Same warning as Shared Worker + operations will block the main thread
       // Useful for browsers which does not support Web Workers properly
       // E.g. Edge does not support window.crypto nor IndexedDB inside Workers
       // Which makes the use of this module impossible in a Worker context
-      allowMainWebWorker: false
-    }
+      allowMainWebWorker: false,
+      // When Shared Worker is not available, you can use a Web Worker to achieve the same
+      // Be warned that using Web Worker will be an issue if you are running multiple tabs,
+      // it is recommended to prevent the opening of multiple database connections to avoid
+      // overwrite and data loss
+      allowWebWorkerFallback: false,
+    },
   ) {
     if (Database.isNodejs) {
-      console.log("websql: Using Node.JS Worker");
-      const { MessageChannel, Worker } = __non_webpack_require__(
-        "worker_threads"
-      );
+      console.log('websql: Using Node.JS Worker');
+      const {MessageChannel, Worker} = __non_webpack_require__('worker_threads');
       this.worker = new Worker(workerUrl);
       Database.MessageChannel = MessageChannel;
     } else if (Database.isSharedWorkerSupported) {
-      console.log("websql: Using Shared Worker");
+      console.log('websql: Using Shared Worker');
       this.worker = new SharedWorker(workerUrl);
       this.worker.port.start();
     } else if (
@@ -76,40 +67,38 @@ export class Database {
       (Database.isWorkerSupported && !Database.isIEOrLegacyEdge) &&
       options.allowWebWorkerFallback
     ) {
-      console.warn("websql: Using Web Worker. Experience will be degraded.");
+      console.warn('websql: Using Web Worker. Experience will be degraded.');
       this.worker = new Worker(workerUrl);
     } else if (
       !Database.isSharedWorkerSupported &&
       (!Database.isWorkerSupported || Database.isIEOrLegacyEdge) &&
       options.allowMainWebWorker
     ) {
-      console.warn(
-        "websql: Using Pseudo Web Worker. Experience will be degraded heavily."
-      );
-      console.log("Database.isWorkerSupported ", Database.isWorkerSupported);
-      console.log("Database.isIEOrLegacyEdge ", Database.isIEOrLegacyEdge);
-      const PseudoWorker = require("pseudo-worker");
+      console.warn('websql: Using Pseudo Web Worker. Experience will be degraded heavily.');
+      console.log('Database.isWorkerSupported ', Database.isWorkerSupported);
+      console.log('Database.isIEOrLegacyEdge ', Database.isIEOrLegacyEdge);
+      const PseudoWorker = require('pseudo-worker');
       this.worker = new PseudoWorker(workerUrl);
     } else {
       throw new Error(
-        "Shared Worker are not available in your browser and Web Worker / Web Worker in Main Thread fallback is disabled. Aborting."
+        'Shared Worker are not available in your browser and Web Worker / Web Worker in Main Thread fallback is disabled. Aborting.',
       );
     }
 
     if (!Database.isNodejs) {
       // Use browser Message Channel
-      Database.MessageChannel = window["MessageChannel"];
+      Database.MessageChannel = window['MessageChannel'];
 
       // Attempt to save or close the database on unload
-      window.addEventListener("unload", async () => {
+      window.addEventListener('unload', async () => {
         if (this.databaseInstanceCreated) {
           if (!Database.isSharedWorkerSupported) {
             // If we use Web Worker then it means this window
             // is the only connection to the database so
             // we can safely close the database connection
-            await this.postMessageToWorker("close");
+            await this.postMessageToWorker('close');
           } else {
-            await this.postMessageToWorker("saveChanges");
+            await this.postMessageToWorker('saveChanges');
           }
         }
       });
@@ -119,7 +108,7 @@ export class Database {
     return this.createNewProxy<this>(this, async (calleeName, ...args) => {
       // Hidden API to return the worker instance
       // Mostly used to terminate the worker from outside
-      if (calleeName === "_getWorkerInstance") {
+      if (calleeName === '_getWorkerInstance') {
         return this.worker;
       }
       if (!this.databaseInstanceCreated) {
@@ -130,55 +119,48 @@ export class Database {
     });
   }
 
-  private createNewProxy<T>(
-    forwardTo: any,
-    handler: (calleeName: string, ...args: any) => any
-  ): T {
+  private createNewProxy<T>(forwardTo: any, handler: (calleeName: string, ...args: any) => any): T {
     return new Proxy(forwardTo, {
+      deleteProperty: () => {
+        throw new Error('Forbidden operation, object is frozen');
+      },
       get: (_target, calleeName) => {
         // https://stackoverflow.com/a/53890904
         // This proxy is not thenable
-        if (calleeName === "then") {
+        if (calleeName === 'then') {
           return null;
         }
         return async (...args) => handler(calleeName.toString(), ...args);
       },
-      set: () => {
-        throw new Error("Forbidden operation, object is frozen");
-      },
       has: () => {
-        throw new Error("Forbidden operation, object is frozen");
+        throw new Error('Forbidden operation, object is frozen');
       },
-      deleteProperty: () => {
-        throw new Error("Forbidden operation, object is frozen");
-      }
+      set: () => {
+        throw new Error('Forbidden operation, object is frozen');
+      },
     });
   }
 
   // Create the database instance on the worker
-  private async createDatabaseInstance() {
-    await this.postMessageToWorker("constructor");
+  private async createDatabaseInstance(): Promise<void> {
+    await this.postMessageToWorker('constructor');
     this.databaseInstanceCreated = true;
   }
 
-  private remapper(calleeName: string, output: any) {
+  private remapper(calleeName: string, output: any): any {
     switch (calleeName) {
-      case "prepare":
+      case 'prepare':
         const statementId: number = output;
         // Return a proxy that will forward to the Worker API
         return this.createNewProxy<{}>({}, async (calleeName, ...args) => {
-          const response = await this.postMessageToWorker(
-            `statements.${calleeName.toString()}`,
-            args,
-            { statementId }
-          );
+          const response = await this.postMessageToWorker(`statements.${calleeName.toString()}`, args, {statementId});
           return response;
         });
     }
     return output;
   }
 
-  private static translateError(error: Error) {
+  private static translateError(error: Error): Error {
     // Since we cannot postMessage Error instances,
     // this function can recreate Errors based on a
     // similar given object
@@ -188,10 +170,10 @@ export class Database {
     return reconstructedError;
   }
 
-  private postMessageToWorker = (
+  private readonly postMessageToWorker = (
     calleeName: string,
     args: any[] = [],
-    additionalData: {} = {}
+    additionalData: {} = {},
   ): Promise<any> => {
     return new Promise((resolve, reject) => {
       const messageChannel = new Database.MessageChannel();
@@ -212,20 +194,17 @@ export class Database {
       const input = {
         args: args.slice(), // Force casting "arguments" into a regular Array
         functionName: calleeName, // Name of the function to call from the worker
-        ...additionalData
+        ...additionalData,
       };
       const transfer = [messageChannel.port2];
 
       if (Database.isNodejs) {
         // Send manually the port to the Node.JS Worker so we can reply to this MessageChannel
-        (this.worker as Worker).postMessage({ ...input, transfer }, transfer);
+        (this.worker as Worker).postMessage({...input, transfer}, transfer);
       } else if (Database.isSharedWorkerSupported) {
         // Use the port object to send messages to the Shared Worker
         // the same way as for Web Worker
-        (this.worker as SharedWorker.SharedWorker).port.postMessage(
-          input,
-          transfer
-        );
+        (this.worker as SharedWorker.SharedWorker).port.postMessage(input, transfer);
       } else {
         // Regular Web Worker communication
         (this.worker as Worker).postMessage(input, transfer);

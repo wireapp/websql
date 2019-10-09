@@ -17,32 +17,27 @@
  *
  */
 
-import { MessageQueue } from "./MessageQueue";
-import { isSharedWorkerSupported, isNodejs } from "./Helper";
+import {isNodejs, isSharedWorkerSupported} from './Helper';
+import {MessageQueue} from './MessageQueue';
 
 declare const self: any;
 
 if (isNodejs) {
   // Node.JS Worker
-  const { isMainThread, parentPort } = __non_webpack_require__(
-    "worker_threads"
-  );
+  const {isMainThread, parentPort} = __non_webpack_require__('worker_threads');
   if (isMainThread) {
-    throw new Error(
-      "This script can only be running from within a Node.JS Worker"
-    );
+    throw new Error('This script can only be running from within a Node.JS Worker');
   }
-  (parentPort as any).on("message", data =>
+  (parentPort as any).on('message', data =>
     MessageQueue.add({
       data,
-      ports: data.transfer
-    })
+      ports: data.transfer,
+    }),
   );
 } else if (isSharedWorkerSupported) {
   // Shared Worker
-  self.onconnect = event =>
-    (event.ports[0].onmessage = event => MessageQueue.add(event));
+  self.onconnect = event => (event.ports[0].onmessage = event => MessageQueue.add(event));
 } else {
   // Web Worker / Polyfilled Web Worker
-  self.addEventListener("message", event => MessageQueue.add(event));
+  self.addEventListener('message', event => MessageQueue.add(event));
 }

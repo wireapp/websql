@@ -17,12 +17,12 @@
  *
  */
 
-export type ExecResultInterface = { columns: string[]; values: any[] };
-export type ParamsInterface = any[] | { [key: string]: any };
+export type ExecResultInterface = {columns: string[]; values: any[]};
+export type ParamsInterface = any[] | {[key: string]: any};
 export interface ConnectionOptions {
   vfs?: string;
-  mode?: "ro" | "rw" | "rwc" | "memory";
-  cache?: "shared" | "private";
+  mode?: 'ro' | 'rw' | 'rwc' | 'memory';
+  cache?: 'shared' | 'private';
   psow?: boolean;
   nolock?: boolean;
   immutable?: boolean;
