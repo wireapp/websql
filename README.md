@@ -1,6 +1,6 @@
 ## websql
 
-[![Build Status](https://travis-ci.org/wireapp/websql.svg?branch=master)](http://travis-ci.org/wireapp/websql)
+[![Build Status](https://travis-ci.com/wireapp/websql.svg?branch=master)](http://travis-ci.com/wireapp/websql)
 
 ##### Currently WIP
 
