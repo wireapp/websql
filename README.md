@@ -68,14 +68,14 @@ cd ..
 ```
 cd websql
 git submodule update --init --recursive
-npm install
-npm run build
+yarn
+yarn build
 ```
 
 ### Run demo server
 
 ```
-npm run demo
+yarn demo
 ```
 
 ## Thanks
