@@ -12,6 +12,7 @@ git:
   submodules: true
 
 cache:
+  yarn: true
   directories:
     - $HOME/.npm
     - node_modules
@@ -23,8 +24,8 @@ before_install:
   - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
 
 install:
-  - npm install
+  - yarn
 
 script:
-  - npm run lint
-  - docker exec -it emscripten npm run build
+  - yarn lint
+  - docker exec -it emscripten yarn build
