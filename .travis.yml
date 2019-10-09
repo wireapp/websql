@@ -24,6 +24,7 @@ before_install:
   - docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:sdk-incoming-64bit bash
 
 install:
+  - docker exec -it emscripten npm i -g yarn
   - yarn
 
 script:
