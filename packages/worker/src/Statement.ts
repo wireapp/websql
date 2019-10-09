@@ -17,38 +17,29 @@
  *
  */
 
-import { SQLite, NULL_PTR, __range__ } from "./Helper";
+import {Database} from './Database';
+import {NULL_PTR, SQLite, __range__} from './Helper';
 import {
+  sqlite3_bind_blob,
+  sqlite3_bind_double,
+  sqlite3_bind_int,
+  sqlite3_bind_parameter_index,
+  sqlite3_bind_text,
   sqlite3_clear_bindings,
-  sqlite3_reset,
-  sqlite3_finalize,
-  sqlite3_step,
-  sqlite3_column_double,
-  sqlite3_column_text,
   sqlite3_column_blob,
   sqlite3_column_bytes,
-  sqlite3_data_count,
+  sqlite3_column_double,
   sqlite3_column_name,
-  sqlite3_bind_text,
-  sqlite3_bind_blob,
-  sqlite3_bind_int,
-  sqlite3_bind_double,
-  sqlite3_bind_parameter_index,
-  sqlite3_column_type
-} from "./lib/sqlite3";
-import { Database } from "./Database";
-import { ResultGetType, BindType, ValueType }  from "./StatementInterface";
+  sqlite3_column_text,
+  sqlite3_column_type,
+  sqlite3_data_count,
+  sqlite3_finalize,
+  sqlite3_reset,
+  sqlite3_step,
+} from './lib/sqlite3';
+import {BindType, ResultGetType, ValueType} from './StatementInterface';
 
-export const whitelistedFunctions = [
-  "bind",
-  "get",
-  "getColumnNames",
-  "getAsObject",
-  "free",
-  "step",
-  "reset",
-  "run"
-];
+export const whitelistedFunctions = ['bind', 'get', 'getColumnNames', 'getAsObject', 'free', 'step', 'reset', 'run'];
 
 /* Represents a prepared statement.
 
@@ -68,12 +59,9 @@ export const whitelistedFunctions = [
 */
 export class Statement {
   private pos: number = 1; // Index of the leftmost parameter is 1
-  private allocatedMemory: number[] = []; // Pointers to allocated memory, that need to be freed when the statemend is destroyed
+  private readonly allocatedMemory: number[] = []; // Pointers to allocated memory, that need to be freed when the statemend is destroyed
 
-  constructor(
-    private statementPtr: number,
-    private readonly database: Database
-  ) {}
+  constructor(private statementPtr: number, private readonly database: Database) {}
 
   /*
     Bind values to the parameters, after having reseted the statement
@@ -110,13 +98,13 @@ export class Statement {
     */
   public bind(values: BindType): boolean {
     if (!this.statementPtr) {
-      throw new Error("Statement closed");
+      throw new Error('Statement closed');
     }
 
     this.reset();
 
-    if (typeof values !== "object") {
-      throw new Error("Could not bind unknown object type");
+    if (typeof values !== 'object') {
+      throw new Error('Could not bind unknown object type');
     }
 
     if (Array.isArray(values)) {
@@ -130,7 +118,7 @@ export class Statement {
   // that can be retrieved with Statement.get()
   public step(): boolean | void {
     if (!this.statementPtr) {
-      throw new Error("Statement closed");
+      throw new Error('Statement closed');
     }
 
     this.pos = 1;
@@ -199,18 +187,18 @@ export class Statement {
     */
   public getColumnNames(): string[] {
     return __range__(0, sqlite3_data_count(this.statementPtr), false).map(i =>
-      sqlite3_column_name(this.statementPtr, i)
+      sqlite3_column_name(this.statementPtr, i),
     );
   }
 
   /* Return all the rows associating column names with their value.
-    
+
     @example
       const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
       If you want to bind data you can do: statement.bind({stuff});
       console.log(statement.getAsObject()); // Will print [{nbr:5, data: Uint8Array([1,2,3]), null_value:null}]
     */
-  public getAsObject(): {[key:string]: any}[] {
+  public getAsObject(): {[key: string]: any}[] {
     const rowObject: Record<string, ValueType>[] = [];
     let columns: string[] | undefined = undefined;
 
@@ -244,10 +232,7 @@ export class Statement {
   public reset(): boolean {
     this.freemem();
 
-    return (
-      sqlite3_clear_bindings(this.statementPtr) === SQLite.OK &&
-      sqlite3_reset(this.statementPtr) === SQLite.OK
-    );
+    return sqlite3_clear_bindings(this.statementPtr) === SQLite.OK && sqlite3_reset(this.statementPtr) === SQLite.OK;
   }
 
   // Free the memory used by the statement
@@ -274,11 +259,7 @@ export class Statement {
     const size = sqlite3_column_bytes(this.statementPtr, pos);
     const ptr = sqlite3_column_blob(this.statementPtr, pos);
     const result = new Uint8Array(size);
-    for (
-      let i = 0, end = size, asc = 0 <= end;
-      asc ? i < end : i > end;
-      asc ? i++ : i--
-    ) {
+    for (let i = 0, end = size, asc = 0 <= end; asc ? i < end : i > end; asc ? i++ : i--) {
       result[i] = Module.HEAP8[ptr + i];
     }
     return result;
@@ -295,19 +276,15 @@ export class Statement {
   // Bind values to parameters
   private bindString(string: string, pos: number = this.pos++): boolean {
     const bytes = Module.intArrayFromString(string);
-    const strptr = Module.allocate(bytes, "i8", Module.ALLOC_NORMAL, NULL_PTR);
+    const strptr = Module.allocate(bytes, 'i8', Module.ALLOC_NORMAL, NULL_PTR);
     this.allocatedMemory.push(strptr);
-    this.database.handleError(
-      sqlite3_bind_text(this.statementPtr, pos, strptr, bytes.length - 1, 0)
-    );
+    this.database.handleError(sqlite3_bind_text(this.statementPtr, pos, strptr, bytes.length - 1, 0));
     return true;
   }
   private bindBlob(array: number[], pos: number = this.pos++): boolean {
-    const blobptr = Module.allocate(array, "i8", Module.ALLOC_NORMAL, NULL_PTR);
+    const blobptr = Module.allocate(array, 'i8', Module.ALLOC_NORMAL, NULL_PTR);
     this.allocatedMemory.push(blobptr);
-    this.database.handleError(
-      sqlite3_bind_blob(this.statementPtr, pos, blobptr, array.length, 0)
-    );
+    this.database.handleError(sqlite3_bind_blob(this.statementPtr, pos, blobptr, array.length, 0));
     return true;
   }
   private bindNumber(num: number, pos: number = this.pos++): boolean {
@@ -323,26 +300,24 @@ export class Statement {
   // Call bindNumber or bindString appropriatly
   private bindValue(value: any, pos: number = this.pos++): boolean {
     switch (typeof value) {
-      case "string":
+      case 'string':
         return this.bindString(value, pos);
-      case "number":
+      case 'number':
         return this.bindNumber(value, pos);
-      case "boolean":
+      case 'boolean':
         return this.bindNumber(value ? 1 : 0, pos);
-      case "object":
+      case 'object':
         if (value === null) {
           return this.bindNull(pos);
         } else if (value.length != null) {
           return this.bindBlob(value, pos);
         }
         break;
-      case "undefined":
+      case 'undefined':
         return this.bindNull(pos);
     }
 
-    throw new Error(
-      `Wrong API use: tried to bind a value of an unknown type (${value}).`
-    );
+    throw new Error(`Wrong API use: tried to bind a value of an unknown type (${value}).`);
   }
 
   // Bind names and values of an object to the named parameters of the statement

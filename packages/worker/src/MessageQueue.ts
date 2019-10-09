@@ -21,17 +21,17 @@ let MessageHandler: any;
 const isRuntimeInitialized = (() =>
   new Promise(
     resolve =>
-      (Module["onRuntimeInitialized"] = async () => {
-        MessageHandler = (await import("./MessageHandler")).default;
+      (Module['onRuntimeInitialized'] = async () => {
+        MessageHandler = (await import('./MessageHandler')).default;
         resolve();
-      })
+      }),
   ))();
 
 export class MessageQueue {
   private static processing: boolean = false;
-  private static queue: any[] = [];
+  private static readonly queue: any[] = [];
 
-  public static async add(event: any) {
+  public static async add(event: any): Promise<void> {
     if (!this.processing) {
       // Ensure the runtime is available
       await isRuntimeInitialized;
@@ -43,7 +43,7 @@ export class MessageQueue {
     }
   }
 
-  private static async process(event: any) {
+  private static async process(event: any): Promise<void> {
     this.processing = true;
     await MessageHandler.onMessageReceived(event);
     if (this.queue.length !== 0) {

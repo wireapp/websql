@@ -64,13 +64,13 @@ export enum SQLite {
   NULL = 5,
 
   // Encodings, used for registering functions
-  UTF8 = 1
+  UTF8 = 1,
 }
 
 export function __range__(left: number, right: number, inclusive: any): number[] {
-  let range: number[] = [];
-  let ascending = left < right;
-  let end = !inclusive ? right : ascending ? right + 1 : right - 1;
+  const range: number[] = [];
+  const ascending = left < right;
+  const end = !inclusive ? right : ascending ? right + 1 : right - 1;
   for (let i = left; ascending ? i < end : i > end; ascending ? i++ : i--) {
     range.push(i);
   }
@@ -81,22 +81,18 @@ export class ExtendableError extends Error {
   constructor(message: string, name: string) {
     super(message);
     this.name = name;
-    if (typeof Error["captureStackTrace"] === "function") {
-      Error["captureStackTrace"](this, this.constructor);
+    if (typeof Error['captureStackTrace'] === 'function') {
+      Error['captureStackTrace'](this, this.constructor);
     } else {
       this.stack = new Error(message).stack;
     }
   }
 }
 
-export const isSharedWorkerSupported =
-  typeof self !== "undefined" && typeof self.onconnect !== "undefined";
+export const isSharedWorkerSupported = typeof self !== 'undefined' && typeof self.onconnect !== 'undefined';
 export const isNodejs =
-  typeof process === "object" &&
-  typeof process.versions === "object" &&
-  typeof process.versions.node === "string";
+  typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node === 'string';
 
 export const DatabaseAlreadyMountedError = (message: string) =>
-  new ExtendableError(message, "DatabaseAlreadyMountedError");
-export const InvalidEncryptionKeyError = (message: string) =>
-  new ExtendableError(message, "InvalidEncryptionKeyError");
+  new ExtendableError(message, 'DatabaseAlreadyMountedError');
+export const InvalidEncryptionKeyError = (message: string) => new ExtendableError(message, 'InvalidEncryptionKeyError');
