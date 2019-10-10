@@ -76,7 +76,7 @@
   },
   "scripts": {
     "build": "make clean && yarn build-worker && yarn build-database && yarn build-ts",
-    "build-ts": "yarn clean-ts && tsc",
+    "build-ts": "yarn clean-ts && tsc --declaration --emitDeclarationOnly",
     "build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
     "build-worker": "cd ./packages/wrapper/ && webpack",
     "clean": "make clean-all",

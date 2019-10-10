@@ -3,8 +3,6 @@
     "allowJs": false,
     "alwaysStrict": true,
     "esModuleInterop": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "module": "commonjs",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
