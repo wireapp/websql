@@ -3,6 +3,8 @@
     "allowJs": false,
     "alwaysStrict": true,
     "esModuleInterop": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "module": "commonjs",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
@@ -10,6 +12,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "outDir": "dist",
     "removeComments": true,
     "strict": true,
     "strictBindCallApply": true,
@@ -19,5 +22,5 @@
     "target": "es2016",
     "types": ["node", "@types/emscripten", "@types/sharedworker"]
   },
-  "exclude": ["node_modules"]
+  "exclude": ["dist", "node_modules"]
 }

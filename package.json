@@ -19,6 +19,7 @@
     "husky": "3.0.8",
     "lint-staged": "9.4.2",
     "prettier": "1.18.2",
+    "rimraf": "3.0.0",
     "test": "0.6.0",
     "tiny-worker": "2.1.2",
     "ts-loader": "6.0.4",
@@ -32,9 +33,7 @@
     "webpack-node-externals": "1.7.2"
   },
   "files": [
-    "dist",
-    "packages/**/*.ts",
-    "websql.d.ts"
+    "dist"
   ],
   "homepage": "http://github.com/wireapp/websql",
   "husky": {
@@ -59,7 +58,7 @@
   ],
   "license": "MIT",
   "lint-staged": {
-    "*.ts": [
+    "packages/**/*.ts": [
       "tslint --project tsconfig.json --fix",
       "git add"
     ],
@@ -76,10 +75,12 @@
     "url": "http://github.com/wireapp/websql.git"
   },
   "scripts": {
-    "build": "make clean && yarn build-worker && yarn build-database",
+    "build": "make clean && yarn build-worker && yarn build-database && yarn build-ts",
+    "build-ts": "yarn clean-ts && tsc",
     "build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
     "build-worker": "cd ./packages/wrapper/ && webpack",
     "clean": "make clean-all",
+    "clean-ts": "rimraf dist/worker dist/wrapper dist/*.ts",
     "demo": "yarn demo-copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
     "demo-copy-from-dist": "cpr ./dist ./demo -o",
     "demo-node": "yarn demo-copy-from-dist && cd demo && node index.js",
@@ -94,6 +95,5 @@
     "test-wasm": "node test/all.js wasm",
     "test-wasm-debug": "node test/all.js wasm-debug"
   },
-  "types": "websql.d.ts",
   "version": "0.0.8"
 }
