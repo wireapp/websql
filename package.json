@@ -95,5 +95,5 @@
     "test-wasm-debug": "node test/all.js wasm-debug"
   },
   "types": "websql.d.ts",
-  "version": "0.0.7"
+  "version": "0.0.8"
 }
