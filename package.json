@@ -31,6 +31,10 @@
     "webpack-cli": "3.3.6",
     "webpack-node-externals": "1.7.2"
   },
+  "files": [
+    "dist",
+    "websql.d.ts"
+  ],
   "homepage": "http://github.com/wireapp/websql",
   "husky": {
     "hooks": {
