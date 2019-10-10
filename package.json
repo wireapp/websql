@@ -33,6 +33,7 @@
   },
   "files": [
     "dist",
+    "packages/**/*.ts",
     "websql.d.ts"
   ],
   "homepage": "http://github.com/wireapp/websql",
