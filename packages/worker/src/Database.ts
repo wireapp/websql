@@ -17,7 +17,7 @@
  *
  */
 
-import {ConnectionOptions, ExecResultInterface, ParamsInterface} from './DatabaseInteface';
+import {ConnectionOptions, ExecResultInterface, ParamsInterface} from './DatabaseInterface';
 import {DatabaseAlreadyMountedError, InvalidEncryptionKeyError, NULL_PTR, SQLite, isNodejs} from './Helper';
 import {
   RegisterExtensionFunctions,

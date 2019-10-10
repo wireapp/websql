@@ -17,7 +17,7 @@
  *
  */
 
-import {ConnectionOptions, ExecResultInterface, ParamsInterface} from './packages/worker/src/DatabaseInteface';
+import {ConnectionOptions, ExecResultInterface, ParamsInterface} from './packages/worker/src/DatabaseInterface';
 import {SQLite} from './packages/worker/src/Helper';
 import {BindType, ResultGetType} from './packages/worker/src/StatementInterface';
 import {DatabaseWorkerOptions} from './packages/wrapper/src/WorkerInterface';
