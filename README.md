@@ -36,6 +36,13 @@ No API docs yet. But you can check out the demo file [here](https://github.com/w
 
 ## Compiling & Installation
 
+The latest version was built on:
+
+```
+Linux Debian 10 x64
+emcc 1.38.47 (commit 9ed207099a0845654a008872378c4054cc6a56ea)
+```
+
 ### Install emsdk
 
 #### macOS
