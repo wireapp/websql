@@ -17,10 +17,9 @@
  *
  */
 
-import {ConnectionOptions, ExecResultInterface, ParamsInterface} from './packages/worker/src/DatabaseInterface';
-import {SQLite} from './packages/worker/src/Helper';
-import {BindType, ResultGetType} from './packages/worker/src/StatementInterface';
-import {DatabaseWorkerOptions} from './packages/wrapper/src/WorkerInterface';
+import {ConnectionOptions, ExecResultInterface, ParamsInterface} from './worker/src/DatabaseInterface';
+import {BindType, ResultGetType} from './worker/src/StatementInterface';
+import {DatabaseWorkerOptions} from './wrapper/src/WorkerInterface';
 
 // All public functions from Statement are promisified in the proxy
 // Statement cannot be instantiated from outside so we can remove the constructor here
