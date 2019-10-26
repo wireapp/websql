@@ -40,7 +40,7 @@ The latest version was built on:
 
 ```
 Linux Debian 10 x64
-emcc 1.38.47 (commit ae5044e7797654f2ed5fb7c0e174e7c8ead5187b)
+emcc 1.38.47 (commit 9ed207099a0845654a008872378c4054cc6a56ea)
 ```
 
 ### Install emsdk

@@ -174,9 +174,9 @@ export class Database {
     }
 
     // Unmount
-    FS.unmount(Database.mountName);
-    FS.rmdir(Database.mountName);
-    this.idbfsMounted = false;
+    //FS.unmount(Database.mountName);
+    //FS.rmdir(Database.mountName);
+    //this.idbfsMounted = false;
 
     // Clear the pointer
     this.databaseInstancePtr = undefined;
