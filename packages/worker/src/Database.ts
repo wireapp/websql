@@ -56,7 +56,7 @@ export class Database {
   private nodeDatabaseDir?: string;
 
   private static readonly metadataTableName = '_sqleet_metadata';
-  private static readonly mountName = '/sqleet';
+  public static readonly mountName = '/sqleet';
   private static readonly databaseExtension = 'db';
 
   // A list of all prepared statements of the database
