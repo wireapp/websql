@@ -9,7 +9,7 @@ export declare class Database {
     private identifier?;
     private nodeDatabaseDir?;
     private static readonly metadataTableName;
-    private static readonly mountName;
+    static readonly mountName = "/sqleet";
     private static readonly databaseExtension;
     statements: Record<number, Statement>;
     constructor();
