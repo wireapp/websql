@@ -14,6 +14,7 @@ declare class Statement {
     step(): Promise<boolean | void>;
 }
 export declare class Database {
+    static readonly mountName = "/sqleet";
     constructor(workerUrl: string, options?: DatabaseWorkerOptions);
     _getWorkerInstance(): Promise<Worker>;
     close(saveAfterClose?: boolean): Promise<void>;

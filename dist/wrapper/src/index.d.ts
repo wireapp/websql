@@ -2,6 +2,7 @@ import { DatabaseWorkerOptions } from './WorkerInterface';
 export declare class Database {
     readonly workerUrl: string;
     readonly options: DatabaseWorkerOptions;
+    static readonly mountName = "/sqleet";
     private static readonly isNodejs;
     private static readonly isSharedWorkerSupported;
     private static readonly isWorkerSupported;
