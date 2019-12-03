@@ -38,6 +38,7 @@ declare class Statement {
 // maintain this class declaration manually
 // Note: The constructor is from the Wrapper, the rest is from the Worker
 export declare class Database {
+  static readonly mountName = '/sqleet';
   constructor(workerUrl: string, options?: DatabaseWorkerOptions);
   _getWorkerInstance(): Promise<Worker>;
   close(saveAfterClose?: boolean): Promise<void>;

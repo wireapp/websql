@@ -21,6 +21,7 @@ import {isIEOrLegacyEdge} from './Helper';
 import {DatabaseWorkerOptions} from './WorkerInterface';
 
 export class Database {
+  public static readonly mountName = '/sqleet';
   private static readonly isNodejs =
     typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node === 'string';
   private static readonly isSharedWorkerSupported =
