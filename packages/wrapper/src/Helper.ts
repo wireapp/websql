@@ -24,7 +24,7 @@ export function isIEOrLegacyEdge(): boolean {
   // Edge 13             Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586
   // Edge 77             Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.19 Safari/537.36 Edg/77.0.235.9
 
-  // Do not detect "Edg" user agent since it's Chromium
+  // Do not detect "Edge" user agent since it's Chromium
 
   const userAgent = window.navigator.userAgent;
   return userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/') > 0 || userAgent.indexOf('Edge/') > 0;

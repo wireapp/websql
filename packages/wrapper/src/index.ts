@@ -42,15 +42,16 @@ export class Database {
     readonly workerUrl: string,
     readonly options: DatabaseWorkerOptions = {
       // Main or Pseudo Web Worker will run within the current thread
-      // Same warning as Shared Worker + operations will block the main thread
+      // Same warning as Shared Worker + operations will block the main thread.
       // Useful for browsers which does not support Web Workers properly
-      // E.g. Edge does not support window.crypto nor IndexedDB inside Workers
-      // Which makes the use of this module impossible in a Worker context
+      // e.g. Edge does not support window.crypto nor IndexedDB inside Workers
+      // which makes the use of this module impossible in a Worker context.
       allowMainWebWorker: false,
-      // When Shared Worker is not available, you can use a Web Worker to achieve the same
+
+      // When Shared Worker is not available, you can use a Web Worker to achieve the same.
       // Be warned that using Web Worker will be an issue if you are running multiple tabs,
       // it is recommended to prevent the opening of multiple database connections to avoid
-      // overwrite and data loss
+      // overwrite and data loss.
       allowWebWorkerFallback: false,
     },
   ) {
@@ -95,9 +96,8 @@ export class Database {
       window.addEventListener('unload', async () => {
         if (this.databaseInstanceCreated) {
           if (!Database.isSharedWorkerSupported) {
-            // If we use Web Worker then it means this window
-            // is the only connection to the database so
-            // we can safely close the database connection
+            // If we use Web Worker then it means this window is the only
+            // connection to the database so we can safely close the database connection
             await this.postMessageToWorker('close');
           } else {
             await this.postMessageToWorker('saveChanges');
@@ -108,8 +108,8 @@ export class Database {
 
     // Return a proxy so we can forward all calls to the Worker
     return this.createNewProxy<this>(this, async (calleeName, ...args) => {
-      // Hidden API to return the worker instance
-      // Mostly used to terminate the worker from outside
+      // Hidden API to return the worker instance,
+      // mostly used to terminate the worker from outside
       if (calleeName === '_getWorkerInstance') {
         return this.worker;
       }
@@ -127,7 +127,7 @@ export class Database {
         throw new Error('Forbidden operation, object is frozen');
       },
       get: (_target, calleeName) => {
-        // https://stackoverflow.com/a/53890904
+        // see https://stackoverflow.com/a/53890904
         // This proxy is not thenable
         if (calleeName === 'then') {
           return null;
@@ -143,7 +143,7 @@ export class Database {
     });
   }
 
-  // Create the database instance on the worker
+  /** Create the database instance on the worker */
   private async createDatabaseInstance(): Promise<void> {
     await this.postMessageToWorker('constructor');
     this.databaseInstanceCreated = true;

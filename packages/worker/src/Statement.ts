@@ -44,18 +44,17 @@ export const whitelistedFunctions = ['bind', 'get', 'getColumnNames', 'getAsObje
 /**
  * Represents a prepared statement.
  *
- * Prepared statements allow you to have a template sql string,
- * that you can execute multiple times with different parameters.
+ * Prepared statements allow you to use a template SQL string,
+ * which you can execute multiple times with different parameters.
  *
- * You can't instantiate this class directly, you have to use a [Database](Database.html)
+ * You can't instantiate this class directly, you have to use a `Database`
  * object in order to create a statement.
  *
- * Statements can't be created by the API user, only by Database::prepare
+ * Statements can't be created by the API user, only by `Database.prepare()`
  *
- * **Warning**: When you close a database (using db.close()), all its statements are
+ * **Warning**: When you close a database (using `db.close()`), all its statements are
  * closed too and become unusable.
  *
- * @see Database.html#prepare-dynamic
  * @see https://en.wikipedia.org/wiki/Prepared_statement
  */
 export class Statement {
@@ -65,36 +64,38 @@ export class Statement {
   constructor(private statementPtr: number, private readonly database: Database) {}
 
   /**
-   * Bind values to the parameters, after having reseted the statement
+   * Bind values to the parameters, after resetting the statement.
    *
-   * SQL statements can have parameters, named *'?', '?NNN', ':VVV', '@VVV', '$VVV'*,
-   * where NNN is a number and VVV a string.
+   * SQL statements can have parameters, called `?`, `?NNN`, `:VVV`, `@VVV`, `$VVV`,
+   * where `NNN` is a number and `VVV` a string.
+   *
    * This function binds these parameters to the given values.
    *
-   * *Warning*: ':', '@', and '$' are included in the parameters names
+   * **Warning**: `:`, `@`, and `$` are included in the parameter names.
    *
    * **Binding values to named parameters**
    *
-   * ```javascript
-   * const stmt = db.prepare('UPDATE test SET a=@newval WHERE id BETWEEN $mini AND $maxi');
-   * stmt.bind({$mini:10, $maxi:20, '@newval':5});
-   * ```
+   * - Creates a statement that contains parameters like '$VVV', ':VVV', '@VVV'
+   * - Calls `Statement.bind` with an object as parameter
    *
-   * - Create a statement that contains parameters like '$VVV', ':VVV', '@VVV'
-   * - Call `Statement.bind` with an object as parameter
+   * ```javascript
+   * const statement = db.prepare('UPDATE test SET a=@newval WHERE id BETWEEN $mini AND $maxi');
+   * statement.bind({$mini:10, $maxi:20, '@newval':5});
+   * ```
    *
    * **Binding values to anonymous parameters**
    *
-   * ```javascript
-   * const stmt = db.prepare('UPDATE test SET a=? WHERE id BETWEEN ? AND ?');
-   * stmt.bind([5, 10, 20]);
-   * ```
+   * - Creates a statement that contains parameters like `?` or `?NNN`
+   * - Calls `Statement.bind` with an array as parameter
    *
-   *   - Create a statement that contains parameters like '?', '?NNN'
-   *   - Call `Statement.bind` with an array as parameter
+   * ```javascript
+   * const statement = db.prepare('UPDATE test SET a=? WHERE id BETWEEN ? AND ?');
+   * statement.bind([5, 10, 20]);
+   * ```
    *
    * **Value types**
    *
+   * ```
    * | Javascript Type   | SQLite Type   |
    * |-------------------|---------------|
    * | number            | REAL, INTEGER |
@@ -102,6 +103,7 @@ export class Statement {
    * | string            | TEXT          |
    * | Array, Uint8Array | BLOB          |
    * | null              | NULL          |
+   * ```
    *
    * @see http://www.sqlite.org/datatype3.html
    */
@@ -194,9 +196,9 @@ export class Statement {
   /**
    * Get the list of column names of a row of result of a statement.
    * ```javascript
-   *      const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
-   *      statement.step(); // Execute the statement
-   *      console.log(statement.getColumnNames()); // Will print ['nbr','data','null_value']
+   * const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
+   * statement.step(); // Execute the statement
+   * console.log(statement.getColumnNames()); // Will print ['nbr', 'data', 'null_value']
    * ```
    */
   public getColumnNames(): string[] {
@@ -209,9 +211,9 @@ export class Statement {
    * Return all the rows associating column names with their value.
    *
    * ```javascript
-   *   const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
-   *   // If you want to bind data you can do: statement.bind({stuff});
-   *   console.log(statement.getAsObject()); // Will print [{nbr:5, data: Uint8Array([1,2,3]), null_value:null}]
+   * const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
+   * // If you want to bind data you can do: statement.bind({stuff});
+   * console.log(statement.getAsObject()); // Will print [{nbr: 5, data: Uint8Array([1, 2, 3]), null_value: null}]
    *   ```
    */
   public getAsObject(): {[key: string]: any}[] {
@@ -233,8 +235,10 @@ export class Statement {
     return rowObject;
   }
 
-  // Shorthand for bind + step + reset
-  // Bind the values, execute the statement, ignoring the rows it returns, and resets it
+  /**
+   * Shorthand for `bind()` + `step()` + `reset()`
+   * Bind the values, execute the statement, ignoring the rows it returns, and resets it
+   */
   public run(values: BindType): void {
     if (values) {
       this.bind(values);
@@ -243,15 +247,18 @@ export class Statement {
     this.reset();
   }
 
-  // Reset a statement, so that it's parameters can be bound to new values
-  // It also clears all previous bindings, freeing the memory used by bound parameters.
+  /**
+   * Reset a statement, so that it's parameters can be bound to new values
+   * It also clears all previous bindings, freeing the memory used by bound parameters.
+   */
   public reset(): boolean {
     this.freemem();
-
     return sqlite3_clear_bindings(this.statementPtr) === SQLite.OK && sqlite3_reset(this.statementPtr) === SQLite.OK;
   }
 
-  // Free the memory used by the statement
+  /**
+   * Free the memory used by the statement
+   */
   public free(): boolean {
     this.freemem();
 
@@ -264,13 +271,15 @@ export class Statement {
 
   // Internal methods
 
-  // Retrieve data from the results of a statement that has been executed
+  /** Retrieve data from the results of a statement that has been executed */
   private getNumber(pos: number = this.pos++): number {
     return sqlite3_column_double(this.statementPtr, pos);
   }
+
   private getString(pos: number = this.pos++): string {
     return sqlite3_column_text(this.statementPtr, pos);
   }
+
   private getBlob(pos: number = this.pos++): Uint8Array {
     const size = sqlite3_column_bytes(this.statementPtr, pos);
     const ptr = sqlite3_column_blob(this.statementPtr, pos);
@@ -281,7 +290,7 @@ export class Statement {
     return result;
   }
 
-  // Free the memory allocated during parameter binding
+  /** Free the memory allocated during parameter binding */
   private freemem(): void {
     let mem: number | undefined;
     while ((mem = this.allocatedMemory.pop())) {
@@ -289,7 +298,7 @@ export class Statement {
     }
   }
 
-  // Bind values to parameters
+  /** Bind values to parameters */
   private bindString(string: string, pos: number = this.pos++): boolean {
     const bytes = Module.intArrayFromString(string);
     const strptr = Module.allocate(bytes, 'i8', Module.ALLOC_NORMAL, NULL_PTR);
@@ -297,23 +306,26 @@ export class Statement {
     this.database.handleError(sqlite3_bind_text(this.statementPtr, pos, strptr, bytes.length - 1, 0));
     return true;
   }
+
   private bindBlob(array: number[], pos: number = this.pos++): boolean {
     const blobptr = Module.allocate(array, 'i8', Module.ALLOC_NORMAL, NULL_PTR);
     this.allocatedMemory.push(blobptr);
     this.database.handleError(sqlite3_bind_blob(this.statementPtr, pos, blobptr, array.length, 0));
     return true;
   }
+
   private bindNumber(num: number, pos: number = this.pos++): boolean {
     const IS_INT = num | 0;
     const bindfunc = num === IS_INT ? sqlite3_bind_int : sqlite3_bind_double;
     this.database.handleError(bindfunc(this.statementPtr, pos, num));
     return true;
   }
+
   private bindNull(pos: number = this.pos++): boolean {
     return sqlite3_bind_blob(this.statementPtr, pos, 0, 0, 0) === SQLite.OK;
   }
 
-  // Call bindNumber or bindString appropriatly
+  // Call bindNumber or bindString appropriately
   private bindValue(value: any, pos: number = this.pos++): boolean {
     switch (typeof value) {
       case 'string':
@@ -336,7 +348,7 @@ export class Statement {
     throw new Error(`Wrong API use: tried to bind a value of an unknown type (${value}).`);
   }
 
-  // Bind names and values of an object to the named parameters of the statement
+  /** Bind names and values of an object to the named parameters of the statement */
   private bindFromObject(valuesObj: BindType): boolean {
     for (const name in valuesObj) {
       const value = valuesObj[name as keyof BindType];

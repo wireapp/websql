@@ -60,7 +60,7 @@ export class Database {
   public static readonly mountName = '/sqleet';
   private static readonly databaseExtension = 'db';
 
-  // A list of all prepared statements of the database
+  /** A list of all prepared statements of the database */
   public statements: Record<number, Statement> = {};
 
   constructor() {}
@@ -150,11 +150,11 @@ export class Database {
   /**
    * Save and close the database, and all associated prepared statements.
    *
-   *  The memory associated to the database and all associated statements
-   *  will be freed.
+   * The memory associated to the database and all associated statements
+   * will be freed.
    *
-   *  **Warning**: A statement belonging to a database that has been closed cannot
-   *  be used anymore.
+   * **Warning**: A statement belonging to a database that has been closed cannot
+   * be used anymore.
    */
   public async close(saveAfterClose: boolean = true): Promise<void> {
     if (!this.databaseInstancePtr) {
@@ -189,7 +189,7 @@ export class Database {
     this.nodeDatabaseDir = undefined;
   }
 
-  // Persist data on disk
+  /** Persist data on disk */
   public async saveChanges(): Promise<void> {
     await this.sync(false);
   }
@@ -249,11 +249,11 @@ export class Database {
    * We have the following table, named `test`:
    *
    * ```
-   * | id | age |  name  |
-   * |:--:|:---:|:------:|
-   * | 1  |  1  | Ling   |
-   * | 2  |  18 | Paul   |
-   * | 3  |  3  | Markus |
+   * | id | age | name   |
+   * |----|-----|--------|
+   * | 1  | 1   | Ling   |
+   * | 2  | 18  | Paul   |
+   * | 3  | 3   | Markus |
    * ```
    *
    * We query it like this:
@@ -265,10 +265,10 @@ export class Database {
    *
    * `res` is now:
    * ```javascript
-   *     [
-   *       {columns: ['id'], values: [[1], [2], [3]]},
-   *       {columns: ['age', 'name'], values: [[1, 'Ling'], [18 , 'Paul'], [3, 'Markus']]}
-   *     ]
+   * [
+   *   {columns: ['id'], values: [[1], [2], [3]]},
+   *   {columns: ['age', 'name'], values: [[1, 'Ling'], [18 , 'Paul'], [3, 'Markus']]}
+   * ]
    * ```
    */
   public async execute(query: string): Promise<ExecResultInterface[]> {
