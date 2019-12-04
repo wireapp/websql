@@ -47,7 +47,7 @@ export default class EventHandler {
   }
 
   public static async onMessageReceived(event: any): Promise<void> {
-    const args = event.data.args;
+    const args: any = event.data.args;
     const functionName: string = event.data.functionName;
 
     // Handle the init of the constructor
@@ -63,7 +63,8 @@ export default class EventHandler {
     }
 
     // Remapper
-    let output;
+    let output: any;
+
     try {
       const isStatementCall = functionName.startsWith(this.statementFunctionName);
       if (isStatementCall) {

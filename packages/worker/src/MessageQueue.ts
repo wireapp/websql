@@ -18,6 +18,7 @@
  */
 
 let MessageHandler: any;
+
 const isRuntimeInitialized = (() =>
   new Promise(
     resolve =>
