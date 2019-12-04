@@ -21,7 +21,7 @@
     "prettier": "1.18.2",
     "rimraf": "3.0.0",
     "test": "0.6.0",
-    "tiny-worker": "2.1.2",
+    "tiny-worker": "2.3.0",
     "ts-loader": "6.0.4",
     "tslint": "5.20.1",
     "tslint-config-prettier": "1.18.0",
