@@ -16,6 +16,7 @@ declare class Statement {
 export declare class Database {
     static readonly mountName = "/sqleet";
     constructor(workerUrl: string, options?: DatabaseWorkerOptions);
+    isOpen(): Promise<boolean>;
     _getWorkerInstance(): Promise<Worker>;
     close(saveAfterClose?: boolean): Promise<void>;
     execute(query: string): Promise<ExecResultInterface[]>;

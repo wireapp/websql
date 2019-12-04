@@ -25,7 +25,7 @@ export declare class Database {
     export(encoding?: 'binary' | 'utf8'): Promise<Uint8Array | string>;
     wipe(identifier: string): Promise<void>;
     getRowsModified(): Promise<number>;
-    isOpen(): boolean;
+    isOpen(): Promise<boolean>;
     private ensureDatabaseIsOpen;
     handleError(returnCode: SQLite): void;
 }
