@@ -18,7 +18,7 @@
     "http-server": "0.11.1",
     "husky": "3.0.8",
     "lint-staged": "9.5.0",
-    "prettier": "1.18.2",
+    "prettier": "1.19.1",
     "rimraf": "3.0.0",
     "test": "0.6.0",
     "tiny-worker": "2.1.2",
