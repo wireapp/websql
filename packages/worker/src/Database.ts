@@ -36,15 +36,16 @@ const apiTemp = stackAlloc(4);
 declare const URLSearchParams: any;
 
 export const whitelistedFunctions = [
-  'mount',
   'close',
-  'saveChanges',
-  'export',
-  'wipe',
-  'getRowsModified',
-  'run',
   'execute',
+  'export',
+  'getRowsModified',
+  'isOpen',
+  'mount',
   'prepare',
+  'run',
+  'saveChanges',
+  'wipe',
 ];
 
 export class Database {
@@ -392,7 +393,7 @@ export class Database {
   }
 
   // Utils
-  public isOpen(): boolean {
+  public async isOpen(): Promise<boolean> {
     return !!this.databaseInstancePtr;
   }
 
