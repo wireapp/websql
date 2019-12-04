@@ -19,4 +19,4 @@
 
 export type ValueType = string | number | Uint8Array | null;
 export type BindType = any[] | {};
-export type ResultGetType = (ValueType)[];
+export type ResultGetType = ValueType[];
