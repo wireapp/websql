@@ -15,7 +15,7 @@
   "devDependencies": {
     "@wireapp/prettier-config": "0.3.0",
     "@wireapp/tslint-config": "1.4.1",
-    "http-server": "0.11.1",
+    "http-server": "0.12.0",
     "husky": "3.0.8",
     "lint-staged": "9.5.0",
     "prettier": "1.18.2",
