@@ -19,7 +19,7 @@
 
 declare const self: any;
 
-// Null pointer
+/** Null pointer */
 export const NULL_PTR = 0;
 
 // SQLite interface

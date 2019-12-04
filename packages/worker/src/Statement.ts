@@ -41,61 +41,70 @@ import {BindType, ResultGetType, ValueType} from './StatementInterface';
 
 export const whitelistedFunctions = ['bind', 'get', 'getColumnNames', 'getAsObject', 'free', 'step', 'reset', 'run'];
 
-/* Represents a prepared statement.
-
-  Prepared statements allow you to have a template sql string,
-  that you can execute multiple times with different parameters.
-
-  You can't instantiate this class directly, you have to use a [Database](Database.html)
-  object in order to create a statement.
-
-  Statements can't be created by the API user, only by Database::prepare
-
-  **Warning**: When you close a database (using db.close()), all its statements are
-  closed too and become unusable.
-
-  @see Database.html#prepare-dynamic
-  @see https://en.wikipedia.org/wiki/Prepared_statement
-*/
+/**
+ * Represents a prepared statement.
+ *
+ * Prepared statements allow you to have a template sql string,
+ * that you can execute multiple times with different parameters.
+ *
+ * You can't instantiate this class directly, you have to use a [Database](Database.html)
+ * object in order to create a statement.
+ *
+ * Statements can't be created by the API user, only by Database::prepare
+ *
+ * **Warning**: When you close a database (using db.close()), all its statements are
+ * closed too and become unusable.
+ *
+ * @see Database.html#prepare-dynamic
+ * @see https://en.wikipedia.org/wiki/Prepared_statement
+ */
 export class Statement {
   private pos: number = 1; // Index of the leftmost parameter is 1
   private readonly allocatedMemory: number[] = []; // Pointers to allocated memory, that need to be freed when the statemend is destroyed
 
   constructor(private statementPtr: number, private readonly database: Database) {}
 
-  /*
-    Bind values to the parameters, after having reseted the statement
-
-    SQL statements can have parameters, named *'?', '?NNN', ':VVV', '@VVV', '$VVV'*,
-    where NNN is a number and VVV a string.
-    This function binds these parameters to the given values.
-
-    *Warning*: ':', '@', and '$' are included in the parameters names
-
-    *# Binding values to named parameters
-    @example Bind values to named parameters
-        var stmt = db.prepare('UPDATE test SET a=@newval WHERE id BETWEEN $mini AND $maxi');
-        stmt.bind({$mini:10, $maxi:20, '@newval':5});
-    - Create a statement that contains parameters like '$VVV', ':VVV', '@VVV'
-    - Call Statement.bind with an object as parameter
-
-    *# Binding values to parameters
-    @example Bind values to anonymous parameters
-        var stmt = db.prepare('UPDATE test SET a=? WHERE id BETWEEN ? AND ?');
-        stmt.bind([5, 10, 20]);
-      - Create a statement that contains parameters like '?', '?NNN'
-      - Call Statement.bind with an array as parameter
-
-    *# Value types
-    Javascript type | SQLite type
-    --- | ---
-    number | REAL, INTEGER
-    boolean | INTEGER
-    string | TEXT
-    Array, Uint8Array | BLOB
-    null | NULL
-    @see http://www.sqlite.org/datatype3.html
-    */
+  /**
+   * Bind values to the parameters, after having reseted the statement
+   *
+   * SQL statements can have parameters, named *'?', '?NNN', ':VVV', '@VVV', '$VVV'*,
+   * where NNN is a number and VVV a string.
+   * This function binds these parameters to the given values.
+   *
+   * *Warning*: ':', '@', and '$' are included in the parameters names
+   *
+   * **Binding values to named parameters**
+   *
+   * ```javascript
+   * const stmt = db.prepare('UPDATE test SET a=@newval WHERE id BETWEEN $mini AND $maxi');
+   * stmt.bind({$mini:10, $maxi:20, '@newval':5});
+   * ```
+   *
+   * - Create a statement that contains parameters like '$VVV', ':VVV', '@VVV'
+   * - Call `Statement.bind` with an object as parameter
+   *
+   * **Binding values to anonymous parameters**
+   *
+   * ```javascript
+   * const stmt = db.prepare('UPDATE test SET a=? WHERE id BETWEEN ? AND ?');
+   * stmt.bind([5, 10, 20]);
+   * ```
+   *
+   *   - Create a statement that contains parameters like '?', '?NNN'
+   *   - Call `Statement.bind` with an array as parameter
+   *
+   * **Value types**
+   *
+   * | Javascript Type   | SQLite Type   |
+   * |-------------------|---------------|
+   * | number            | REAL, INTEGER |
+   * | boolean           | INTEGER       |
+   * | string            | TEXT          |
+   * | Array, Uint8Array | BLOB          |
+   * | null              | NULL          |
+   *
+   * @see http://www.sqlite.org/datatype3.html
+   */
   public bind(values: BindType): boolean {
     if (!this.statementPtr) {
       throw new Error('Statement closed');
@@ -114,8 +123,10 @@ export class Statement {
     }
   }
 
-  // Execute the statement, fetching the the next line of result,
-  // that can be retrieved with Statement.get()
+  /**
+   * Execute the statement, fetching the the next line of result,
+   * that can be retrieved with `Statement.get()`
+   */
   public step(): boolean | void {
     if (!this.statementPtr) {
       throw new Error('Statement closed');
@@ -136,14 +147,16 @@ export class Statement {
   }
 
   /*
-    Get one row of results of a statement.
-    If the first parameter is not provided, step must have been called before get.
-
-    @example Print all the rows of the table test to the console
-
-    const statement = db.prepare('SELECT * FROM test');
-    while (statement.step()) console.log(statement.get());
-  */
+   * Get one row of results of a statement.
+   * If the first parameter is not provided, step must have been called before get.
+   *
+   * **Print all the rows of the table test to the console**
+   *
+   * ```javascript
+   * const statement = db.prepare('SELECT * FROM test');
+   * while (statement.step()) console.log(statement.get());
+   * ```
+   */
   public get(params?: BindType): ResultGetType {
     // Get all fields
     if (params) {
@@ -178,26 +191,29 @@ export class Statement {
     return result;
   }
 
-  /* Get the list of column names of a row of result of a statement.
-
-    @example
-      const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
-      statement.step(); // Execute the statement
-      console.log(statement.getColumnNames()); // Will print ['nbr','data','null_value']
-    */
+  /**
+   * Get the list of column names of a row of result of a statement.
+   * ```javascript
+   *      const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
+   *      statement.step(); // Execute the statement
+   *      console.log(statement.getColumnNames()); // Will print ['nbr','data','null_value']
+   * ```
+   */
   public getColumnNames(): string[] {
     return __range__(0, sqlite3_data_count(this.statementPtr), false).map(i =>
       sqlite3_column_name(this.statementPtr, i),
     );
   }
 
-  /* Return all the rows associating column names with their value.
-
-    @example
-      const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
-      If you want to bind data you can do: statement.bind({stuff});
-      console.log(statement.getAsObject()); // Will print [{nbr:5, data: Uint8Array([1,2,3]), null_value:null}]
-    */
+  /**
+   * Return all the rows associating column names with their value.
+   *
+   * ```javascript
+   *   const statement = db.prepare('SELECT 5 AS nbr, x'616200' AS data, NULL AS null_value;');
+   *   // If you want to bind data you can do: statement.bind({stuff});
+   *   console.log(statement.getAsObject()); // Will print [{nbr:5, data: Uint8Array([1,2,3]), null_value:null}]
+   *   ```
+   */
   public getAsObject(): {[key: string]: any}[] {
     const rowObject: Record<string, ValueType>[] = [];
     let columns: string[] | undefined = undefined;
