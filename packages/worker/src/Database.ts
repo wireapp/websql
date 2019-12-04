@@ -65,7 +65,7 @@ export class Database {
   constructor() {}
 
   // Mount the database
-  // ToDo: Add a upgrade scheme?
+  // TODO: Add a upgrade scheme?
   public async mount(
     options: ConnectionOptions,
     identifier: string = 'default',
@@ -146,14 +146,15 @@ export class Database {
     }
   }
 
-  /* Save and close the database, and all associated prepared statements.
-
-    The memory associated to the database and all associated statements
-    will be freed.
-
-    **Warning**: A statement belonging to a database that has been closed cannot
-    be used anymore.
-    */
+  /**
+   * Save and close the database, and all associated prepared statements.
+   *
+   *  The memory associated to the database and all associated statements
+   *  will be freed.
+   *
+   *  **Warning**: A statement belonging to a database that has been closed cannot
+   *  be used anymore.
+   */
   public async close(saveAfterClose: boolean = true): Promise<void> {
     if (!this.databaseInstancePtr) {
       throw new Error('Database is already closed');
@@ -192,7 +193,7 @@ export class Database {
     await this.sync(false);
   }
 
-  // Sync the filesystem using the internal emcc function
+  /** Sync the filesystem using the internal emcc function */
   private sync(populate: boolean): Promise<void> {
     return new Promise((resolve, reject) => {
       FS.syncfs(populate, (err: any) => {
@@ -204,14 +205,20 @@ export class Database {
     });
   }
 
-  /* Execute an SQL query, ignoring the rows it returns.
-
-    If you use the params argument, you **cannot** provide an sql string that contains several
-    queries (separated by ';')
-
-    @example Insert values in a table
-        db.run('INSERT INTO test VALUES (:age, :name)', {':age':18, ':name':'John'});
-  */
+  /**
+   * Execute an SQL query, ignoring the rows it returns.
+   *
+   * If you use the params argument, you **cannot** provide an sql string that contains several
+   * queries (separated by ';')
+   *
+   * **Example**
+   *
+   * Insert values in a table:
+   *
+   * ```javascript
+   * db.run('INSERT INTO test VALUES (:age, :name)', {':age': 18, ':name': 'John'});
+   * ```
+   */
   public async run(query: string, params?: ParamsInterface): Promise<void> {
     this.ensureDatabaseIsOpen();
     if (params) {
@@ -223,42 +230,46 @@ export class Database {
     }
   }
 
-  /* Execute an SQL query, and returns the result.
-
-    This is a wrapper against Database.prepare, Statement.execute, Statement.get,
-    and Statement.free.
-
-    The result is an array of result elements. There are as many result elements
-    as the number of statements in your sql string (statements are separated by a semicolon)
-
-    Each result element is an object with two properties:
-        'columns' : the name of the columns of the result (as returned by Statement.getColumnNames())
-        'values' : an array of rows. Each row is itself an array of values
-
-    *# Example use
-    We have the following table, named *test* :
-
-    | id | age |  name  |
-    |:--:|:---:|:------:|
-    | 1  |  1  | Ling   |
-    | 2  |  18 | Paul   |
-    | 3  |  3  | Markus |
-
-
-    We query it like that:
-    ```javascript
-    var db = new SQL.Database();
-    var res = db.execute('SELECT id FROM test; SELECT age,name FROM test;');
-    ```
-
-    `res` is now :
-    ```javascript
-        [
-            {columns: ['id'], values:[[1],[2],[3]]},
-            {columns: ['age','name'], values:[[1,'Ling'],[18,'Paul'],[3,'Markus']]}
-        ]
-    ```
-    */
+  /**
+   * Executes an SQL query and returns the result.
+   *
+   * This is a wrapper against `Database.prepare`, `Statement.execute`, `Statement.get`,
+   * and `Statement.free`.
+   *
+   * The result is an array of result elements. There are as many result elements
+   * as the number of statements in your sql string (statements are separated by a semicolon)
+   *
+   * Each result element is an object with two properties:
+   *  * `columns`: the name of the columns of the result (as returned by `Statement.getColumnNames()`)
+   *  * `values`: an array of rows. Each row is itself an array of values
+   *
+   * **Example**
+   *
+   * We have the following table, named `test`:
+   *
+   * ```
+   * | id | age |  name  |
+   * |:--:|:---:|:------:|
+   * | 1  |  1  | Ling   |
+   * | 2  |  18 | Paul   |
+   * | 3  |  3  | Markus |
+   * ```
+   *
+   * We query it like this:
+   *
+   * ```javascript
+   * const db = new SQL.Database();
+   * const res = db.execute('SELECT id FROM test; SELECT age,name FROM test;');
+   * ```
+   *
+   * `res` is now:
+   * ```javascript
+   *     [
+   *       {columns: ['id'], values: [[1], [2], [3]]},
+   *       {columns: ['age', 'name'], values: [[1, 'Ling'], [18 , 'Paul'], [3, 'Markus']]}
+   *     ]
+   * ```
+   */
   public async execute(query: string): Promise<ExecResultInterface[]> {
     this.ensureDatabaseIsOpen();
 
@@ -307,7 +318,7 @@ export class Database {
     return results;
   }
 
-  // Prepare an SQL statement
+  /** Prepare an SQL statement */
   public prepare(query: string, params?: ParamsInterface): number {
     Module.setValue(apiTemp, 0, 'i32');
     this.handleError(sqlite3_prepare_v2(this.databaseInstancePtr, query, -1, apiTemp, NULL_PTR));
@@ -330,7 +341,7 @@ export class Database {
   // Exports the contents of the database to a binary array
   // Note: Currently on iOS, having around 500k entries will make
   // the web page run out of memory when calling this function
-  // ToDo: Use an iterative approach (https://developers.redhat.com/blog/2014/05/20/communicating-large-objects-with-web-workers-in-javascript/)
+  // TODO: Use an iterative approach (https://developers.redhat.com/blog/2014/05/20/communicating-large-objects-with-web-workers-in-javascript/)
   // FS.read can be used to split the data into chunks, multiple postMessage will be required
   public async export(encoding: 'binary' | 'utf8' = 'binary'): Promise<Uint8Array | string> {
     this.ensureDatabaseIsOpen();
@@ -349,27 +360,33 @@ export class Database {
     return binaryDb;
   }
 
-  /* Delete the database
-    Same as close but also remove the database from IndexedDB
-  */
+  /**
+   * Delete the database
+   *
+   * Same as `close()` but also removes the database from IndexedDB.
+   */
   public async wipe(identifier: string): Promise<void> {
     if (this.databaseInstancePtr) {
       throw new Error('Database instance needs to be closed first, use close()');
     }
+
     await this.ensureFilesystemIsMounted();
+
     try {
       FS.unlink(Database.getDatabasePath(identifier));
     } catch (error) {
       throw new Error(`Database either does not exist or is already deleted (${error.message})`);
     }
+
     await this.saveChanges();
   }
 
-  /* Returns the number of rows modified, inserted or deleted by the
-    most recently completed INSERT, UPDATE or DELETE statement on the
-    database Executing any other type of SQL statement does not modify
-    the value returned by this function.
-    */
+  /**
+   * Returns the number of rows modified, inserted or deleted by the
+   * most recently completed `INSERT`, `UPDATE` or `DELETE` statement on the
+   * database. Executing any other type of SQL statement does not modify
+   * the value returned by this function.
+   */
   public async getRowsModified(): Promise<number> {
     return sqlite3_changes(this.databaseInstancePtr);
   }
@@ -384,7 +401,11 @@ export class Database {
       throw new Error('Database closed');
     }
   }
-  // Analyze a result code, return void if no error occured otherwise throw an error with a descriptive message
+
+  /**
+   * Analyze a result code and return `void` if no error occured,
+   * otherwise throw an error with a descriptive message
+   */
   public handleError(returnCode: SQLite): void {
     if (returnCode !== SQLite.OK) {
       const errmsg = sqlite3_errmsg(this.databaseInstancePtr);

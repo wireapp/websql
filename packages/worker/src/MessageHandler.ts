@@ -63,7 +63,8 @@ export default class EventHandler {
     }
 
     // Remapper
-    let output;
+    let output: any;
+
     try {
       const isStatementCall = functionName.startsWith(this.statementFunctionName);
       if (isStatementCall) {

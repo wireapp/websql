@@ -18,7 +18,9 @@
  */
 
 export type ExecResultInterface = {columns: string[]; values: any[]};
+
 export type ParamsInterface = any[] | {[key: string]: any};
+
 export interface ConnectionOptions {
   vfs?: string;
   mode?: 'ro' | 'rw' | 'rwc' | 'memory';
