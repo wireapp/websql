@@ -398,7 +398,10 @@ export class Database {
     }
   }
 
-  // Analyze a result code, return void if no error occured otherwise throw an error with a descriptive message
+  /**
+   * Analyze a result code and return `void` if no error occured,
+   * otherwise throw an error with a descriptive message
+   */
   public handleError(returnCode: SQLite): void {
     if (returnCode !== SQLite.OK) {
       const errmsg = sqlite3_errmsg(this.databaseInstancePtr);
