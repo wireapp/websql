@@ -123,7 +123,7 @@ export class Database {
     }
   }
 
-  private static readonly getDatabasePath = (identifier: any): string =>
+  private static readonly getDatabasePath = identifier =>
     `${Database.mountName}/${identifier}.${Database.databaseExtension}`;
 
   private async ensureFilesystemIsMounted(): Promise<void> {
