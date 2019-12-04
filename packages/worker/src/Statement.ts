@@ -321,9 +321,9 @@ export class Statement {
   }
 
   // Bind names and values of an object to the named parameters of the statement
-  private bindFromObject(valuesObj: {}): boolean {
+  private bindFromObject(valuesObj: BindType): boolean {
     for (const name in valuesObj) {
-      const value = valuesObj[name];
+      const value = valuesObj[name as keyof BindType];
       const num = sqlite3_bind_parameter_index(this.statementPtr, name);
       if (num !== 0) {
         this.bindValue(value, num);

@@ -48,7 +48,7 @@ export default class EventHandler {
 
   public static async onMessageReceived(event: any): Promise<void> {
     const args = event.data.args;
-    const functionName = event.data.functionName;
+    const functionName: string = event.data.functionName;
 
     // Handle the init of the constructor
     if (functionName === 'constructor') {
@@ -74,14 +74,14 @@ export default class EventHandler {
           );
         }
         const statementId = Number(event.data.statementId);
-        output = this.DatabaseInstance.statements[statementId][statementFunctionName](...args);
+        output = (this.DatabaseInstance.statements as any)[statementId][statementFunctionName](...args);
       } else {
         if (!DatabaseWhitelistedFunctions.includes(functionName)) {
           throw new Error(
             `Function "${functionName}" either does not exist or is not allowed to be called from the proxy (Database)`,
           );
         }
-        output = await this.DatabaseInstance[functionName](...args);
+        output = await (this.DatabaseInstance as any)[functionName](...args);
       }
     } catch (error) {
       return this.throwError(error, event);

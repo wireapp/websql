@@ -25,9 +25,9 @@ export class Database {
   private static readonly isNodejs =
     typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node === 'string';
   private static readonly isSharedWorkerSupported =
-    !Database.isNodejs && typeof window !== 'undefined' && typeof window['SharedWorker'] !== 'undefined';
+    !Database.isNodejs && typeof window !== 'undefined' && typeof window.SharedWorker !== 'undefined';
   private static readonly isWorkerSupported =
-    !Database.isNodejs && typeof window !== 'undefined' && typeof window['Worker'] !== 'undefined';
+    !Database.isNodejs && typeof window !== 'undefined' && typeof window.Worker !== 'undefined';
 
   // It is easier to detect Edge than running a IndexedDB test in a worker
   // as we run everything in the constructor and we don't want async code there
@@ -88,7 +88,7 @@ export class Database {
 
     if (!Database.isNodejs) {
       // Use browser Message Channel
-      Database.MessageChannel = window['MessageChannel'];
+      Database.MessageChannel = window.MessageChannel;
 
       // Attempt to save or close the database on unload
       window.addEventListener('unload', async () => {
@@ -131,7 +131,7 @@ export class Database {
         if (calleeName === 'then') {
           return null;
         }
-        return async (...args) => handler(calleeName.toString(), ...args);
+        return async (...args: any[]) => handler(calleeName.toString(), ...args);
       },
       has: () => {
         throw new Error('Forbidden operation, object is frozen');
