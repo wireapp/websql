@@ -65,7 +65,8 @@ export class Database {
       this.worker.port.start();
     } else if (
       !Database.isSharedWorkerSupported &&
-      (Database.isWorkerSupported && !Database.isIEOrLegacyEdge) &&
+      Database.isWorkerSupported &&
+      !Database.isIEOrLegacyEdge &&
       options.allowWebWorkerFallback
     ) {
       console.warn('websql: Using Web Worker. Experience will be degraded.');
