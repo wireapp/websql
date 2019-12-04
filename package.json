@@ -95,5 +95,5 @@
     "test-wasm": "node test/all.js wasm",
     "test-wasm-debug": "node test/all.js wasm-debug"
   },
-  "version": "0.0.12"
+  "version": "0.0.13"
 }
