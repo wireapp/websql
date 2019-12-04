@@ -28,7 +28,7 @@
     "tslint-plugin-prettier": "2.0.1",
     "tslint-react": "4.1.0",
     "tslint-react-hooks": "2.2.1",
-    "typescript": "3.5.3",
+    "typescript": "3.7.3",
     "webpack-cli": "3.3.6",
     "webpack-node-externals": "1.7.2"
   },
@@ -76,7 +76,8 @@
   },
   "scripts": {
     "build": "make clean && yarn build-worker && yarn build-database && yarn build-ts",
-    "build-ts": "yarn clean-ts && tsc --declaration --emitDeclarationOnly",
+    "build-ts": "yarn clean-ts && yarn build-ts-base && yarn build-ts-base -p packages/worker/ && yarn build-ts-base -p packages/wrapper/",
+    "build-ts-base": "tsc --declaration --emitDeclarationOnly",
     "build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
     "build-worker": "cd ./packages/wrapper/ && webpack",
     "clean": "make clean-all",

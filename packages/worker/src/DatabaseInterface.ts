@@ -22,16 +22,16 @@ export type ExecResultInterface = {columns: string[]; values: any[]};
 export type ParamsInterface = any[] | {[key: string]: any};
 
 export interface ConnectionOptions {
-  vfs?: string;
-  mode?: 'ro' | 'rw' | 'rwc' | 'memory';
   cache?: 'shared' | 'private';
-  psow?: boolean;
-  nolock?: boolean;
-  immutable?: boolean;
-  salt?: string;
   header?: unknown;
+  immutable?: boolean;
   kdf?: string;
-  skip?: unknown;
-  page_size?: unknown;
   key: string;
+  mode?: 'ro' | 'rw' | 'rwc' | 'memory';
+  nolock?: boolean;
+  page_size?: unknown;
+  psow?: boolean;
+  salt?: string;
+  skip?: unknown;
+  vfs?: string;
 }

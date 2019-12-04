@@ -28,7 +28,7 @@ if (isNodejs) {
   if (isMainThread) {
     throw new Error('This script can only be running from within a Node.JS Worker');
   }
-  (parentPort as any).on('message', data =>
+  (parentPort as any).on('message', (data: any) =>
     MessageQueue.add({
       data,
       ports: data.transfer,
@@ -36,8 +36,8 @@ if (isNodejs) {
   );
 } else if (isSharedWorkerSupported) {
   // Shared Worker
-  self.onconnect = event => (event.ports[0].onmessage = event => MessageQueue.add(event));
+  self.onconnect = (event: any) => (event.ports[0].onmessage = (event: any) => MessageQueue.add(event));
 } else {
   // Web Worker / Polyfilled Web Worker
-  self.addEventListener('message', event => MessageQueue.add(event));
+  self.addEventListener('message', (event: any) => MessageQueue.add(event));
 }

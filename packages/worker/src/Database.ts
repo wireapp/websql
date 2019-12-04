@@ -98,7 +98,7 @@ export class Database {
     // Build
     const searchParams = new URLSearchParams();
     for (const option in this.options) {
-      searchParams.set(option, this.options[option]);
+      searchParams.set(option, this.options[option as keyof ConnectionOptions]);
     }
     const fileUrl = `file:${Database.getDatabasePath(this.identifier)}?${searchParams.toString()}`;
 
@@ -123,7 +123,7 @@ export class Database {
     }
   }
 
-  private static readonly getDatabasePath = identifier =>
+  private static readonly getDatabasePath = (identifier: string): string =>
     `${Database.mountName}/${identifier}.${Database.databaseExtension}`;
 
   private async ensureFilesystemIsMounted(): Promise<void> {
@@ -347,7 +347,7 @@ export class Database {
     this.ensureDatabaseIsOpen();
 
     const options = this.options;
-    const identifier = this.identifier;
+    const identifier = this.identifier!;
     const nodeDatabaseDir = this.nodeDatabaseDir;
 
     await this.close(true);
