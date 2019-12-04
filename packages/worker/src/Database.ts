@@ -375,6 +375,10 @@ export class Database {
   }
 
   // Utils
+  public isOpen(): boolean {
+    return !!this.databaseInstancePtr;
+  }
+
   private ensureDatabaseIsOpen(): void {
     if (!this.databaseInstancePtr) {
       throw new Error('Database closed');
