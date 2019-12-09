@@ -75,15 +75,15 @@
     "url": "http://github.com/wireapp/websql.git"
   },
   "scripts": {
-    "build": "make clean && yarn build-worker && yarn build-database && yarn build-ts",
-    "build-ts": "yarn clean-ts && tsc --declaration --emitDeclarationOnly",
-    "build-database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
-    "build-worker": "cd ./packages/wrapper/ && webpack",
+    "build": "make clean && yarn build:worker && yarn build:database && yarn build:ts",
+    "build:ts": "yarn clean:ts && tsc --declaration --emitDeclarationOnly",
+    "build:database": "cd ./packages/worker/ && webpack && cd ../../ && make -j4",
+    "build:worker": "cd ./packages/wrapper/ && webpack",
     "clean": "make clean-all",
-    "clean-ts": "rimraf dist/worker dist/wrapper dist/*.ts",
-    "demo": "yarn demo-copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
-    "demo-copy-from-dist": "cpr ./dist ./demo -o",
-    "demo-node": "yarn demo-copy-from-dist && cd demo && node index.js",
+    "clean:ts": "rimraf dist/worker dist/wrapper dist/*.ts",
+    "demo": "yarn demo:copy-from-dist && http-server ./demo -o -a 0.0.0.0 -p 8081 -c 0",
+    "demo:copy-from-dist": "cpr ./dist ./demo -o",
+    "demo:node": "yarn demo:copy-from-dist && cd demo && node index.js",
     "fix": "yarn fix:other && yarn fix:ts",
     "fix:other": "yarn prettier --write",
     "fix:ts": "yarn lint:ts --fix",
@@ -91,9 +91,9 @@
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --project tsconfig.json",
     "prettier": "prettier \"**/*.{json,md,css,yml}\"",
-    "test": "yarn lint && yarn test-wasm && yarn test-wasm-debug",
-    "test-wasm": "node test/all.js wasm",
-    "test-wasm-debug": "node test/all.js wasm-debug"
+    "test": "yarn lint && yarn test:wasm && yarn test:wasm-debug",
+    "test:wasm": "node test/all.js wasm",
+    "test:wasm-debug": "node test/all.js wasm-debug"
   },
   "version": "0.0.14"
 }
