@@ -11,7 +11,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "dist",
-    "removeComments": true,
+    "removeComments": false,
     "strict": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
