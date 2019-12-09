@@ -12,6 +12,7 @@ export declare class Database {
     private databaseInstanceCreated;
     constructor(workerUrl: string, options?: DatabaseWorkerOptions);
     private createNewProxy;
+    /** Create the database instance on the worker */
     private createDatabaseInstance;
     private remapper;
     private static translateError;

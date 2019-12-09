@@ -1,3 +1,4 @@
+/** Null pointer */
 export declare const NULL_PTR = 0;
 export declare enum SQLite {
     OK = 0,
