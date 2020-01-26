@@ -46,10 +46,10 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@types/emscripten@1.38.0":
-  version "1.38.0"
-  resolved "https://registry.npmjs.org/@types/emscripten/-/emscripten-1.38.0.tgz#eba859e3bf94249dcd25bcf853481065a92a6c5c"
-  integrity sha512-qfuBbl9hC0ybmW9s8SDORPgg+LdPV+KRpB8AMdTRqxuQZR4G5T7ozIAVUJLO26N7SFSM1zvDVuZ9+qOX7qt/EQ==
+"@types/emscripten@1.39.0":
+  version "1.39.0"
+  resolved "https://registry.npmjs.org/@types/emscripten/-/emscripten-1.39.0.tgz#8e14c944e51c4b52f671f1bf4c7b5bcb906d9184"
+  integrity sha512-o07+tQ4Pc0eTUwQU8Ab5b2Ej1lToBzBQq6khY0Wi5o7Z+/CtwvIyUP20/5GU/uQA+OdbTXcvCs/jELIlgw6wKg==
 
 "@types/events@*":
   version "3.0.0"
