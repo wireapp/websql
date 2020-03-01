@@ -69,7 +69,7 @@ export class Database {
   // Mount the database
   // TODO: Add a upgrade scheme?
   public async mount(
-    options: ConnectionOptions,
+    options: ConnectionOptions = {},
     identifier: string = 'default',
     nodeDatabaseDir?: string,
   ): Promise<void> {
@@ -77,12 +77,8 @@ export class Database {
       throw DatabaseAlreadyMountedError('Database is already mounted');
     }
 
-    if (!options || !options['key']) {
-      throw new Error('An encryption key must be set, aborting the mount operation');
-    }
-
     // Update context
-    this.options = options;
+    this.options = options ?? {};
     this.identifier = identifier;
 
     // Set the database storage location for Node.JS
