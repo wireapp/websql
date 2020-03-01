@@ -352,7 +352,16 @@ export class Database {
 
     await this.close(true);
 
-    const binaryDb = FS.readFile(Database.getDatabasePath(identifier), {encoding: encoding as any});
+    let binaryDb: Uint8Array | string | undefined;
+    if (encoding === 'binary') {
+      binaryDb = FS.readFile(Database.getDatabasePath(identifier), {
+        encoding: 'binary',
+      });
+    } else {
+      binaryDb = FS.readFile(Database.getDatabasePath(identifier), {
+        encoding: 'utf8',
+      });
+    }
     await this.mount(options as ConnectionOptions, identifier, nodeDatabaseDir);
 
     return binaryDb;
