@@ -58,10 +58,10 @@
   resolved "https://registry.npmjs.org/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
 
-"@types/emscripten@1.38.0":
-  version "1.38.0"
-  resolved "https://registry.npmjs.org/@types/emscripten/-/emscripten-1.38.0.tgz#eba859e3bf94249dcd25bcf853481065a92a6c5c"
-  integrity sha512-qfuBbl9hC0ybmW9s8SDORPgg+LdPV+KRpB8AMdTRqxuQZR4G5T7ozIAVUJLO26N7SFSM1zvDVuZ9+qOX7qt/EQ==
+"@types/emscripten@1.39.3":
+  version "1.39.3"
+  resolved "https://registry.npmjs.org/@types/emscripten/-/emscripten-1.39.3.tgz#cac2f24b4739c344c42f928a4c1af1aab245364e"
+  integrity sha512-F+LPHVwVWp6bkhRq7sMdW0JsQMXd5ZuPbjwU/X6HaAtvIjRmYL2z4BCIopnBRcrzZLorVFf8gxY/GR7szLuPEw==
 
 "@types/events@*":
   version "3.0.0"
