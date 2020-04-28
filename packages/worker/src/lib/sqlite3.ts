@@ -17,6 +17,8 @@
  *
  */
 
+declare var Module: SQLiteEmscriptenModule;
+
 export const sqlite3_open = Module.cwrap('sqlite3_open', 'number', ['string', 'number']);
 export const sqlite3_close_v2 = Module.cwrap('sqlite3_close_v2', 'number', ['number']);
 export const sqlite3_exec = Module.cwrap('sqlite3_exec', 'number', ['number', 'string', 'number', 'number', 'number']);

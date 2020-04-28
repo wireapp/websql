@@ -29,3 +29,19 @@ declare function stackRestore(ptr: number): void;
 declare function allocateUTF8OnStack(str: string): number;
 declare function removeFunction(index: number): void;
 declare function addFunction(func: Function, sig?: any): number;
+
+// Exported methods via `-s EXTRA_EXPORTED_RUNTIME_METHODS`, see `runtime_methods.json`.
+interface SQLiteEmscriptenModule extends EmscriptenModule {
+  ALLOC_DYNAMIC: typeof ALLOC_DYNAMIC;
+  ALLOC_NONE: typeof ALLOC_NONE;
+  ALLOC_NORMAL: typeof ALLOC_NORMAL;
+  ALLOC_STACK: typeof ALLOC_STACK;
+  allocate: typeof allocate;
+  cwrap: typeof cwrap;
+  getValue: typeof getValue;
+  intArrayFromString: typeof intArrayFromString;
+  setValue: typeof setValue;
+  stackAlloc: typeof stackAlloc;
+  stackRestore: typeof stackRestore;
+  stackSave: typeof stackSave;
+}

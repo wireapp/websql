@@ -39,6 +39,8 @@ import {
 } from './lib/sqlite3';
 import {BindType, ResultGetType, ValueType} from './StatementInterface';
 
+declare var Module: SQLiteEmscriptenModule;
+
 export const whitelistedFunctions = ['bind', 'get', 'getColumnNames', 'getAsObject', 'free', 'step', 'reset', 'run'];
 
 /**
