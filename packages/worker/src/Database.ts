@@ -34,6 +34,7 @@ import {Statement} from './Statement';
 const apiTemp = stackAlloc(4);
 
 declare const URLSearchParams: any;
+declare var Module: SQLiteEmscriptenModule;
 
 export const whitelistedFunctions = [
   'close',
@@ -344,6 +345,8 @@ export class Database {
   // the web page run out of memory when calling this function
   // TODO: Use an iterative approach (https://developers.redhat.com/blog/2014/05/20/communicating-large-objects-with-web-workers-in-javascript/)
   // FS.read can be used to split the data into chunks, multiple postMessage will be required
+  public async export(encoding?: 'binary'): Promise<Uint8Array>;
+  public async export(encoding: 'utf8'): Promise<string>;
   public async export(encoding: 'binary' | 'utf8' = 'binary'): Promise<Uint8Array | string> {
     this.ensureDatabaseIsOpen();
 
@@ -353,9 +356,7 @@ export class Database {
 
     await this.close(true);
 
-    const binaryDb = FS.readFile(Database.getDatabasePath(identifier), {
-      encoding,
-    });
+    const binaryDb = FS.readFile(Database.getDatabasePath(identifier), {encoding: encoding as any});
     await this.mount(options as ConnectionOptions, identifier, nodeDatabaseDir);
 
     return binaryDb;
