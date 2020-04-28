@@ -59,12 +59,10 @@
   "license": "MIT",
   "lint-staged": {
     "packages/**/*.ts": [
-      "tslint --project tsconfig.json --fix",
-      "git add"
+      "tslint --project tsconfig.json --fix"
     ],
     "*.{json,md,css,yml}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "main": "./dist/websql.js",
