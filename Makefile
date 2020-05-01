@@ -12,7 +12,15 @@ EMFLAGS = \
 	-s EXPORTED_FUNCTIONS=@exports/functions.json \
 	-s EXTRA_EXPORTED_RUNTIME_METHODS=@exports/runtime_methods.json \
 	-s SINGLE_FILE=1 \
-	-s NODEJS_CATCH_EXIT=0
+	-s NODEJS_CATCH_EXIT=0 \
+	-s FORCE_FILESYSTEM=1 \
+	-s STACK_OVERFLOW_CHECK=2 \
+	-lnodefs.js \
+	-lidbfs.js \
+	-lworkerfs.js \
+	-lproxyfs.js
+
+# TODO: Enable -s NODERAWFS=1 \
 
 EMFLAGS_WASM = \
 	-s WASM=1 \
@@ -25,11 +33,12 @@ EMFLAGS_OPTIMIZED= \
 	-Oz
 
 EMFLAGS_DEBUG = \
+	-s ASSERTIONS=1 \
+	-s DEMANGLE_SUPPORT=1 \
 	-s INLINING_LIMIT=10 \
 	-O1
 
 EMFLAGS_SECURE = \
-	-fstack-protector-all \
 	-D_FORTIFY_SOURCE=2 \
 	-fPIE
 
