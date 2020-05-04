@@ -17,6 +17,7 @@ export declare class Database {
     mount(options: ConnectionOptions, identifier?: string, nodeDatabaseDir?: string): Promise<void>;
     private static readonly getDatabasePath;
     private ensureFilesystemIsMounted;
+    get isMounted(): boolean;
     /**
      * Save and close the database, and all associated prepared statements.
      *
@@ -89,7 +90,8 @@ export declare class Database {
     execute(query: string): Promise<ExecResultInterface[]>;
     /** Prepare an SQL statement */
     prepare(query: string, params?: ParamsInterface): number;
-    export(encoding?: 'binary' | 'utf8'): Promise<Uint8Array | string>;
+    export(encoding?: 'binary'): Promise<Uint8Array>;
+    export(encoding: 'utf8'): Promise<string>;
     /**
      * Delete the database
      *
