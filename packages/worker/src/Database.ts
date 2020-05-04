@@ -148,6 +148,10 @@ export class Database {
     }
   }
 
+  get isMounted(): boolean {
+    return this.idbfsMounted;
+  }
+
   /**
    * Save and close the database, and all associated prepared statements.
    *
