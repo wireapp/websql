@@ -26,7 +26,7 @@ export interface ConnectionOptions {
   header?: unknown;
   immutable?: boolean;
   kdf?: string;
-  key: string;
+  key?: string;
   mode?: 'ro' | 'rw' | 'rwc' | 'memory';
   nolock?: boolean;
   page_size?: unknown;

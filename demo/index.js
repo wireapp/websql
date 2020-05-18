@@ -1,7 +1,7 @@
-const websql = require('./websql');
+const websql = require('../dist/websql');
 
 const identifier = "aaaaa";
-const db = new websql.Database('./websql-worker-debug.js');
+const db = new websql.Database('../dist/websql-worker-debug.js');
 
 const log = (functionName, text) => console.log(`${functionName}: ${text}`)
 const timer = () => {
@@ -124,4 +124,6 @@ async function main() {
   await (await db._getWorkerInstance()).terminate();
 }
 
-main();
+main().catch((err)=>{
+  console.log(err)
+})

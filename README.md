@@ -61,13 +61,14 @@ cd ..
 #### Linux
 
 ```
-sudo apt-get install python3 default-jre
-git clone https://github.com/emscripten-core/emsdk.git
-cd emsdk
-./emsdk install latest
-./emsdk activate latest
-source ./emsdk_env.sh
-cd ..
+docker rm -f emscripten
+docker run -dit --name emscripten -v $(pwd):/src trzeci/emscripten:1.39.8-upstream bash
+docker exec -it emscripten npm i -g yarn
+docker exec -it emscripten yarn clean
+docker exec -it emscripten yarn build
+
+yarn build:wrapper && yarn build:worker && yarn build:ts
+
 ```
 
 ### Compile websql

@@ -69,7 +69,7 @@ export class Database {
   // Mount the database
   // TODO: Add a upgrade scheme?
   public async mount(
-    options: ConnectionOptions,
+    options: ConnectionOptions = {},
     identifier: string = 'default',
     nodeDatabaseDir?: string,
   ): Promise<void> {
@@ -77,12 +77,8 @@ export class Database {
       throw DatabaseAlreadyMountedError('Database is already mounted');
     }
 
-    if (!options || !options['key']) {
-      throw new Error('An encryption key must be set, aborting the mount operation');
-    }
-
     // Update context
-    this.options = options;
+    this.options = options ?? {};
     this.identifier = identifier;
 
     // Set the database storage location for Node.JS
@@ -360,7 +356,16 @@ export class Database {
 
     await this.close(true);
 
-    const binaryDb = FS.readFile(Database.getDatabasePath(identifier), {encoding: encoding as any});
+    let binaryDb: Uint8Array | string | undefined;
+    if (encoding === 'binary') {
+      binaryDb = FS.readFile(Database.getDatabasePath(identifier), {
+        encoding: 'binary',
+      });
+    } else {
+      binaryDb = FS.readFile(Database.getDatabasePath(identifier), {
+        encoding: 'utf8',
+      });
+    }
     await this.mount(options as ConnectionOptions, identifier, nodeDatabaseDir);
 
     return binaryDb;

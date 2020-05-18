@@ -32,14 +32,16 @@ export default class EventHandler {
     port.postMessage(data);
   }
 
-  private static throwError(errorContent: Error, event: any): void {
+  private static throwError(errorContent: Error | string, event: any): void {
     // For some unknown reason the optimizer is not destructuring the error variable, access it directly instead
+    const ce: Error = errorContent instanceof Error ? errorContent : new Error(JSON.stringify(errorContent));
+
     this.replyToOrigin(
       {
         error: {
-          message: errorContent.message.toString(),
-          name: errorContent.name.toString(),
-          stack: errorContent.stack ? errorContent.stack.toString() : undefined,
+          message: (ce.message ?? '').toString(),
+          name: (ce.name ?? '').toString(),
+          stack: (ce.stack ?? '').toString(),
         },
       },
       event,
@@ -47,7 +49,7 @@ export default class EventHandler {
   }
 
   public static async onMessageReceived(event: any): Promise<void> {
-    const args: any = event.data.args;
+    const args: any[] = event.data.args;
     const functionName: string = event.data.functionName;
 
     // Handle the init of the constructor
