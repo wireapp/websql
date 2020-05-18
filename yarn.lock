@@ -52,11 +52,6 @@
   resolved "https://registry.npmjs.org/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/sharedworker@0.0.29":
-  version "0.0.29"
-  resolved "https://registry.npmjs.org/@types/sharedworker/-/sharedworker-0.0.29.tgz#69ce70764a0380f4c27ae036f6f9c4e2c75dbdac"
-  integrity sha512-vdlrZJKGrAedfcMt4Tn8gIa3tJxRhrTtwfEu9jmVtaCZHgbensRMEbpkZ+dY/6WpE12a8K00KaQnJV0lH9ZmdA==
-
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
   resolved "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.9.0.tgz#bd850604b4042459a5a41cd7d338cbed695ed964"
