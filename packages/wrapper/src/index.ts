@@ -25,7 +25,7 @@ export class Database {
   private static readonly isNodejs =
     typeof process === 'object' && typeof process.versions === 'object' && typeof process.versions.node === 'string';
   private static readonly isSharedWorkerSupported =
-    !Database.isNodejs && typeof window !== 'undefined' && typeof window.SharedWorker !== 'undefined';
+    !Database.isNodejs && typeof window !== 'undefined' && typeof SharedWorker !== 'undefined';
   private static readonly isWorkerSupported =
     !Database.isNodejs && typeof window !== 'undefined' && typeof window.Worker !== 'undefined';
 
@@ -35,7 +35,7 @@ export class Database {
 
   private static MessageChannel: new () => MessageChannel;
 
-  private readonly worker: SharedWorker.SharedWorker | Worker;
+  private readonly worker: SharedWorker | Worker;
   private databaseInstanceCreated: boolean = false;
 
   constructor(
@@ -206,7 +206,7 @@ export class Database {
       } else if (Database.isSharedWorkerSupported) {
         // Use the port object to send messages to the Shared Worker
         // the same way as for Web Worker
-        (this.worker as SharedWorker.SharedWorker).port.postMessage(input, transfer);
+        (this.worker as SharedWorker).port.postMessage(input, transfer);
       } else {
         // Regular Web Worker communication
         (this.worker as Worker).postMessage(input, transfer);

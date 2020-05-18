@@ -3,6 +3,7 @@
     "allowJs": false,
     "alwaysStrict": true,
     "esModuleInterop": true,
+    "lib": ["dom", "esnext"],
     "module": "commonjs",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -18,7 +19,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "target": "es2016",
-    "types": ["node", "@types/emscripten", "@types/sharedworker"]
+    "types": ["node", "@types/emscripten"]
   },
   "exclude": ["dist", "node_modules"]
 }
