@@ -27,7 +27,7 @@
     "tslint-react": "4.2.0",
     "tslint-react-hooks": "2.2.2",
     "typescript": "3.9.2",
-    "webpack": "4.43.0",
+    "webpack": "4.44.1",
     "webpack-cli": "3.3.11",
     "webpack-node-externals": "1.7.2"
   },
