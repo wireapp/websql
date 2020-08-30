@@ -20,7 +20,7 @@
     "rimraf": "3.0.2",
     "test": "0.6.0",
     "tiny-worker": "2.3.0",
-    "ts-loader": "7.0.4",
+    "ts-loader": "8.0.3",
     "tslint": "5.20.1",
     "tslint-config-prettier": "1.18.0",
     "tslint-plugin-prettier": "2.3.0",
