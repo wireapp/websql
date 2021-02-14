@@ -14,7 +14,7 @@
     "@wireapp/prettier-config": "0.3.0",
     "@wireapp/tslint-config": "1.4.1",
     "http-server": "0.12.3",
-    "husky": "4.2.5",
+    "husky": "5.0.9",
     "lint-staged": "10.2.2",
     "prettier": "2.0.5",
     "rimraf": "3.0.2",
