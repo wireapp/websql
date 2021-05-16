@@ -11,7 +11,7 @@
   },
   "description": "Encrypted SQLite database for the browser and Node.JS",
   "devDependencies": {
-    "@wireapp/prettier-config": "0.3.0",
+    "@wireapp/prettier-config": "0.3.2",
     "@wireapp/tslint-config": "1.4.1",
     "http-server": "0.12.3",
     "husky": "4.2.5",
